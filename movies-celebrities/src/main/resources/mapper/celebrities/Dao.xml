@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.cqupt.movies.celebrities.dao.Dao">
+
+	<!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="com.cqupt.movies.celebrities.entity.Entity" id="Map">
+        <result property="id" column="id"/>
+        <result property="name" column="name"/>
+        <result property="englishName" column="english_name"/>
+        <result property="gender" column="gender"/>
+        <result property="sign" column="sign"/>
+        <result property="birth" column="birth"/>
+        <result property="hometown" column="hometown"/>
+        <result property="job" column="job"/>
+        <result property="imdb" column="imdb"/>
+        <result property="brief" column="brief"/>
+        <result property="avatar" column="avatar"/>
+    </resultMap>
+
+
+</mapper>

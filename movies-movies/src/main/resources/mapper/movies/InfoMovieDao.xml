@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.cqupt.movies.movies.dao.InfoMovieDao">
+
+	<!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="com.cqupt.movies.movies.entity.InfoMovieEntity" id="infoMovieMap">
+        <result property="id" column="id"/>
+        <result property="mid" column="mid"/>
+        <result property="thumbUp" column="thumb_up"/>
+        <result property="collect" column="collect"/>
+        <result property="watched" column="watched"/>
+        <result property="keen" column="keen"/>
+    </resultMap>
+
+
+</mapper>
