@@ -10,11 +10,13 @@
         <module name="movies-movies" />
         <module name="movies-member" />
         <module name="movies-celebrities" />
+        <module name="movies-common" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
       <module name="movies" target="1.5" />
       <module name="movies-celebrities" target="17" />
+      <module name="movies-common" target="18" />
       <module name="movies-member" target="17" />
       <module name="movies-movies" target="17" />
     </bytecodeTargetLevel>
@@ -22,6 +24,7 @@
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
       <module name="movies-celebrities" options="-parameters" />
+      <module name="movies-common" options="-parameters" />
       <module name="movies-member" options="-parameters" />
       <module name="movies-movies" options="-parameters" />
     </option>

@@ -13,6 +13,7 @@
         <module>movies-celebrities</module>
         <module>movies-member</module>
         <module>movies-movies</module>
+        <module>movies-common</module>
     </modules>
 
 </project>

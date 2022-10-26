@@ -4,6 +4,7 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/movies.iml" filepath="$PROJECT_DIR$/.idea/movies.iml" />
       <module fileurl="file://$PROJECT_DIR$/movies-celebrities/movies-celebrities.iml" filepath="$PROJECT_DIR$/movies-celebrities/movies-celebrities.iml" />
+      <module fileurl="file://$PROJECT_DIR$/movies-common/movies-common.iml" filepath="$PROJECT_DIR$/movies-common/movies-common.iml" />
       <module fileurl="file://$PROJECT_DIR$/movies-member/movies-member.iml" filepath="$PROJECT_DIR$/movies-member/movies-member.iml" />
       <module fileurl="file://$PROJECT_DIR$/movies-movies/movies-movies.iml" filepath="$PROJECT_DIR$/movies-movies/movies-movies.iml" />
     </modules>

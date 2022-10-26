@@ -1,5 +1,6 @@
 package com.cqupt.movies.movies;
 
+
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
@@ -7,7 +8,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class MoviesMoviesApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(MoviesMoviesApplication.class, args);
+        SpringApplication.run(MoviesMoviesApplication.class);
     }
 
 }
