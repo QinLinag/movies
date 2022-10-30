@@ -45,4 +45,7 @@ public class Entity implements Serializable {
 	 */
 	private Date date;
 
+	//手机号
+	private String phone;
+
 }

@@ -1,7 +1,7 @@
 package com.cqupt.movies.member.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.cqupt.common.utils.PageUtils;
+import com.cqupt.movies.common.utils.PageUtils;
 import com.cqupt.movies.member.entity.ThumbMovieEntity;
 
 import java.util.Map;

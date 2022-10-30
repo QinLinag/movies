@@ -4,6 +4,8 @@ import java.util.Arrays;
 import java.util.Map;
 
 //import org.apache.shiro.authz.annotation.RequiresPermissions;
+import com.cqupt.movies.common.utils.PageUtils;
+import com.cqupt.movies.common.utils.R;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -13,8 +15,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.cqupt.movies.member.entity.ThumbMovieEntity;
 import com.cqupt.movies.member.service.ThumbMovieService;
-import com.cqupt.common.utils.PageUtils;
-import com.cqupt.common.utils.R;
 
 
 

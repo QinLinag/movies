@@ -1,9 +1,10 @@
 package com.cqupt.movies.celebrities.controller;
 
 import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 
-//import org.apache.shiro.authz.annotation.RequiresPermissions;
+
 import com.cqupt.movies.common.utils.PageUtils;
 import com.cqupt.movies.common.utils.R;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +15,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.cqupt.movies.celebrities.entity.Entity;
-import com.cqupt.movies.celebrities.service.Service;
+import com.cqupt.movies.celebrities.service.CelebritiesService;
 
 
 
@@ -30,7 +31,23 @@ import com.cqupt.movies.celebrities.service.Service;
 @RequestMapping("celebrities/")
 public class Controller {
     @Autowired
-    private Service Service;
+    private CelebritiesService CelebritiesService;
+
+
+
+
+
+    /**
+     * 根据名星姓名进行模糊查询，
+     *
+     * */
+    @RequestMapping("/list/{name}")
+    public R listByName(@PathVariable("name") String name){
+        List<Entity> entity=CelebritiesService.listByName(name);
+        return R.ok().put("data",entity);
+    }
+
+
 
     /**
      * 列表
@@ -38,7 +55,7 @@ public class Controller {
     @RequestMapping("/list")
     //@RequiresPermissions("celebrities::list")
     public R list(@RequestParam Map<String, Object> params){
-        PageUtils page = Service.queryPage(params);
+        PageUtils page = CelebritiesService.queryPage(params);
 
         return R.ok().put("page", page);
     }
@@ -50,9 +67,9 @@ public class Controller {
     @RequestMapping("/info/{id}")
     //@RequiresPermissions("celebrities::info")
     public R info(@PathVariable("id") Long id){
-		Entity  = Service.getById(id);
+        Entity byId = CelebritiesService.getById(id);
 
-        return R.ok().put("data", Entity);
+        return R.ok().setData( byId);
     }
 
     /**
@@ -60,8 +77,8 @@ public class Controller {
      */
     @RequestMapping("/save")
     //@RequiresPermissions("celebrities::save")
-    public R save(@RequestBody Entity ){
-		Service.save();
+    public R save(@RequestBody Entity entity){
+		CelebritiesService.save(entity);
 
         return R.ok();
     }
@@ -71,8 +88,8 @@ public class Controller {
      */
     @RequestMapping("/update")
     //@RequiresPermissions("celebrities::update")
-    public R update(@RequestBody Entity ){
-		Service.updateById();
+    public R update(@RequestBody Entity entity){
+		CelebritiesService.updateById(entity);
 
         return R.ok();
     }
@@ -83,7 +100,7 @@ public class Controller {
     @RequestMapping("/delete")
     //@RequiresPermissions("celebrities::delete")
     public R delete(@RequestBody Long[] ids){
-		Service.removeByIds(Arrays.asList(ids));
+		CelebritiesService.removeByIds(Arrays.asList(ids));
 
         return R.ok();
     }

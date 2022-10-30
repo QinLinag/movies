@@ -5,9 +5,12 @@
       <list>
         <option value="$PROJECT_DIR$/movies-movies/pom.xml" />
         <option value="$PROJECT_DIR$/movies-member/pom.xml" />
-        <option value="$PROJECT_DIR$/movies-celebrities/pom.xml" />
         <option value="$PROJECT_DIR$/pom.xml" />
         <option value="$PROJECT_DIR$/movies-common/pom.xml" />
+        <option value="$PROJECT_DIR$/renren-fast/pom.xml" />
+        <option value="$PROJECT_DIR$/movies-gateway/pom.xml" />
+        <option value="$PROJECT_DIR$/movies-auth-server/pom.xml" />
+        <option value="$PROJECT_DIR$/movies-third-part/pom.xml" />
       </list>
     </option>
   </component>

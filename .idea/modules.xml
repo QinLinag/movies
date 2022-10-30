@@ -3,10 +3,14 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/movies.iml" filepath="$PROJECT_DIR$/.idea/movies.iml" />
+      <module fileurl="file://$PROJECT_DIR$/movies-auth-server/movies-auth-server.iml" filepath="$PROJECT_DIR$/movies-auth-server/movies-auth-server.iml" />
       <module fileurl="file://$PROJECT_DIR$/movies-celebrities/movies-celebrities.iml" filepath="$PROJECT_DIR$/movies-celebrities/movies-celebrities.iml" />
       <module fileurl="file://$PROJECT_DIR$/movies-common/movies-common.iml" filepath="$PROJECT_DIR$/movies-common/movies-common.iml" />
+      <module fileurl="file://$PROJECT_DIR$/movies-gateway/movies-gateway.iml" filepath="$PROJECT_DIR$/movies-gateway/movies-gateway.iml" />
       <module fileurl="file://$PROJECT_DIR$/movies-member/movies-member.iml" filepath="$PROJECT_DIR$/movies-member/movies-member.iml" />
       <module fileurl="file://$PROJECT_DIR$/movies-movies/movies-movies.iml" filepath="$PROJECT_DIR$/movies-movies/movies-movies.iml" />
+      <module fileurl="file://$PROJECT_DIR$/movies-third-part/movies-third-part.iml" filepath="$PROJECT_DIR$/movies-third-part/movies-third-part.iml" />
+      <module fileurl="file://$PROJECT_DIR$/renren-fast/renren-fast.iml" filepath="$PROJECT_DIR$/renren-fast/renren-fast.iml" />
     </modules>
   </component>
 </project>

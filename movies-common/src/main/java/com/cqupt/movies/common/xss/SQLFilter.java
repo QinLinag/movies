@@ -9,6 +9,9 @@
 package com.cqupt.movies.common.xss;
 
 
+import com.cqupt.movies.common.utils.RRException;
+import org.apache.commons.lang.StringUtils;
+
 /**
  * SQL过滤
  *

@@ -1,9 +1,10 @@
 package com.cqupt.movies.member.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.cqupt.common.utils.PageUtils;
+import com.cqupt.movies.common.utils.PageUtils;
 import com.cqupt.movies.member.entity.CollectMovieEntity;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -16,5 +17,9 @@ import java.util.Map;
 public interface CollectMovieService extends IService<CollectMovieEntity> {
 
     PageUtils queryPage(Map<String, Object> params);
+
+
+    //根据用户id查询出对应的用户id和收藏的电影的所有实例
+    List<CollectMovieEntity> getCollectMovieEntityByMemberId(Long memberId);
 }
 

@@ -1,7 +1,7 @@
 package com.cqupt.movies.movies.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.cqupt.common.utils.PageUtils;
+import com.cqupt.movies.common.utils.PageUtils;
 import com.cqupt.movies.movies.entity.InfoMovieEntity;
 
 import java.util.Map;
@@ -16,5 +16,9 @@ import java.util.Map;
 public interface InfoMovieService extends IService<InfoMovieEntity> {
 
     PageUtils queryPage(Map<String, Object> params);
+
+
+    //按照电影id查找电影的信息
+    InfoMovieEntity getByMid(Long mid);
 }
 

@@ -1,9 +1,11 @@
 package com.cqupt.movies.celebrities.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.cqupt.common.utils.PageUtils;
 import com.cqupt.movies.celebrities.entity.CelebrityMovieEntity;
+import com.cqupt.movies.celebrities.entity.Entity;
+import com.cqupt.movies.common.utils.PageUtils;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -16,5 +18,8 @@ import java.util.Map;
 public interface CelebrityMovieService extends IService<CelebrityMovieEntity> {
 
     PageUtils queryPage(Map<String, Object> params);
+
+    //根据名人id，查询出名人和其参演的所有电影的实例，
+    List<CelebrityMovieEntity>  listByCelebId(Long celebId);
 }
 

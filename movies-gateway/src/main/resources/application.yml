@@ -1,0 +1,28 @@
+spring:
+  cloud:
+    gateway:
+      routes:
+        - id: movies_celebrities_route
+          uri: lb://movies-celebrities
+          predicates:
+            - Path=/celebrities/**
+
+        - id: movies_member_route
+          uri: lb://movies-member
+          predicates:
+            - Path=/member/**
+
+        - id: movies_movies_route
+          uri: lb://movies-movies
+          predicates:
+            - Path=/movies/**
+
+        - id: movies_auth-server
+          uri: lb://movies-auth-server
+          predicates:
+            - Path=/authserver/**
+
+        - id: movies_third_part
+          uri: lb://movies-third-part
+          predicates:
+            - Path=/thirdpart/**

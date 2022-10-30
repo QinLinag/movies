@@ -1,12 +1,15 @@
 package com.cqupt.movies.celebrities.service.impl;
 
+import com.cqupt.movies.celebrities.entity.Entity;
+import com.cqupt.movies.common.utils.PageUtils;
+import com.cqupt.movies.common.utils.Query;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 import java.util.Map;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.cqupt.common.utils.PageUtils;
-import com.cqupt.common.utils.Query;
 
 import com.cqupt.movies.celebrities.dao.CelebrityMovieDao;
 import com.cqupt.movies.celebrities.entity.CelebrityMovieEntity;
@@ -24,6 +27,12 @@ public class CelebrityMovieServiceImpl extends ServiceImpl<CelebrityMovieDao, Ce
         );
 
         return new PageUtils(page);
+    }
+
+    @Override
+    public List<CelebrityMovieEntity>  listByCelebId(Long celebId) {
+        List<CelebrityMovieEntity> celebrityMoviesEntities = this.getBaseMapper().selectList(new QueryWrapper<CelebrityMovieEntity>().eq("celebrity_id", celebId));
+        return celebrityMoviesEntities;
     }
 
 }

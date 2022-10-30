@@ -10,23 +10,35 @@
         <module name="movies-movies" />
         <module name="movies-member" />
         <module name="movies-celebrities" />
+        <module name="renren-fast" />
+        <module name="movies-auth-server" />
+        <module name="movies-third-part" />
         <module name="movies-common" />
+        <module name="movies-gateway" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
       <module name="movies" target="1.5" />
+      <module name="movies-auth-server" target="17" />
       <module name="movies-celebrities" target="17" />
       <module name="movies-common" target="18" />
+      <module name="movies-gateway" target="17" />
       <module name="movies-member" target="17" />
       <module name="movies-movies" target="17" />
+      <module name="movies-third-part" target="17" />
+      <module name="renren-fast" target="1.8" />
     </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="movies-auth-server" options="-parameters" />
       <module name="movies-celebrities" options="-parameters" />
-      <module name="movies-common" options="-parameters" />
+      <module name="movies-common" options="" />
+      <module name="movies-gateway" options="-parameters" />
       <module name="movies-member" options="-parameters" />
       <module name="movies-movies" options="-parameters" />
+      <module name="movies-third-part" options="-parameters" />
+      <module name="renren-fast" options="-parameters" />
     </option>
   </component>
 </project>

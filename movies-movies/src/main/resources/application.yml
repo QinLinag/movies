@@ -1,0 +1,31 @@
+
+
+spring:
+  application:
+    name: movies-movies
+  datasource:
+    driver-class-name: com.mysql.jdbc.Driver
+    password: 123456
+    username: root
+    url: jdbc:mysql://192.168.224.148:3306/movies
+  cloud:
+    nacos:
+      discovery:
+        server-addr: 127.0.0.1:8848
+  redis:
+    port: 6379
+    host: 192.168.224.148
+
+    jackson:
+      date-format: yyyy-MM-dd HH:mm:ss    #json的时间格式
+
+mybatis-plus:
+  mapper-locations: classpath:/mapper/**/*.xml
+  global-config:
+    db-config:
+      id-type: auto   #主键自增
+      logic-delete-field: 1     #配置逻辑删除
+      logic-not-delete-value: 0
+
+server:
+  port: 9000

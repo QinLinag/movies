@@ -3,7 +3,8 @@ package com.cqupt.movies.movies.controller;
 import java.util.Arrays;
 import java.util.Map;
 
-//import org.apache.shiro.authz.annotation.RequiresPermissions;
+import com.cqupt.movies.common.utils.PageUtils;
+import com.cqupt.movies.common.utils.R;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -13,8 +14,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.cqupt.movies.movies.entity.InfoMovieEntity;
 import com.cqupt.movies.movies.service.InfoMovieService;
-import com.cqupt.common.utils.PageUtils;
-import com.cqupt.common.utils.R;
 
 
 
@@ -30,6 +29,48 @@ import com.cqupt.common.utils.R;
 public class InfoMovieController {
     @Autowired
     private InfoMovieService infoMovieService;
+
+
+    /**
+     * 给电影点赞  点击已看   点击想看
+     * */
+    @RequestMapping("/thumbup")
+    public R thumbUp(@RequestParam("mid") Long mid){
+        InfoMovieEntity entity=infoMovieService.getByMid(mid);
+        if (entity!=null){
+            entity.setThumbUp(entity.getThumbUp()+1);
+            infoMovieService.updateById(entity);
+            return R.ok();
+        }else{
+            return R.error(2,"电影不存在");
+        }
+    }
+
+    @RequestMapping("/watched")
+    public R watched(@RequestParam("mid") Long mid){
+        InfoMovieEntity entity=infoMovieService.getByMid(mid);
+        if (entity!=null){
+            entity.setWatched(entity.getWatched()+1);
+            infoMovieService.updateById(entity);
+            return R.ok();
+        }else{
+            return R.error(2,"电影不存在");
+        }
+    }
+
+    @RequestMapping("/keen")
+    public R keen(@RequestParam("mid") Long mid){
+        InfoMovieEntity entity=infoMovieService.getByMid(mid);
+        if (entity!=null){
+            entity.setKeen(entity.getKeen()+1);
+            infoMovieService.updateById(entity);
+            return R.ok();
+        }else{
+            return R.error(2,"电影不存在");
+        }
+    }
+
+
 
     /**
      * 列表

@@ -1,0 +1,10 @@
+spring:
+  alicloud:
+    access-key:
+    secret-key:
+    sms:
+      host: https://smsmsgs.market.alicloudapi.com
+      path: /sms/
+      skin: 1
+      sign: 1
+      appcode: asdfasddfasdfasdfasdf
