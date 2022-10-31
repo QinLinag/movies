@@ -8,6 +8,5 @@ public class SmsVo {
 
     private String phoneNum;
     private String code;
-    private int min;
 
 }

@@ -65,7 +65,6 @@ public class LoginController {
         //远程调用发送短信的服务
         SmsVo smsVo = new SmsVo();
         smsVo.setCode(code);
-        smsVo.setMin(5);
         smsVo.setPhoneNum(phone);
         thirdPartFeignService.sendCode(smsVo);
         return R.ok();

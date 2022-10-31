@@ -12,6 +12,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 @FeignClient("movies-third-part")
 public interface ThirdPartFeignService {
 
-    @PostMapping(value = "/sendCode")
-    void sendCode(@RequestBody SmsVo sms);
+    @GetMapping("/sendcode")
+    R sendCode(@RequestBody SmsVo smsVo);
 }

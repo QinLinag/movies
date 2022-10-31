@@ -22,31 +22,37 @@ public class SmsSendController {
 
 
     @GetMapping("/sendcode")
-    public R sendCode(@RequestParam("phone") String phone,@RequestParam("code") String code){
-        smsSendComponent.sendSmsCode(phone,code);
+    public R sendCode(@RequestBody SmsVo smsVo){
+        try {
+            smsSendComponent.sendSmsCode(smsVo);
+        } catch (Exception e) {
+            return R.error(1,"短信发送失败");
+        }
         return R.ok();
     }
 
-    @PostMapping(value = "/sendCode")
-    public void sendCode(@RequestBody SmsVo sms){
-        int appId=1400330563;
-        String appKey="";
-        int templateId=308731;
-        String smsSign="CNXFS";
-        try {
-            String[] params={sms.getCode(),Integer.toString(sms.getMin())};
-            SmsSingleSender ssender=new SmsSingleSender(appId,appKey);
-            SmsSingleSenderResult result=ssender.sendWithParam("86",sms.getPhoneNum(),templateId,
-                    params,smsSign,"","");
-            System.out.println(result);
-        }catch (JSONException e){
-            e.printStackTrace();
-        }catch (IOException e){
-            e.printStackTrace();
-        } catch (HTTPException e) {
-            e.printStackTrace();
-        }
-    }
+
+    //腾讯云的
+//    @PostMapping(value = "/sendCode")
+//    public void sendCode(@RequestBody SmsVo sms){
+//        int appId=1400330563;
+//        String appKey="";
+//        int templateId=308731;
+//        String smsSign="CNXFS";
+//        try {
+//            String[] params={sms.getCode(),Integer.toString(sms.getMin())};
+//            SmsSingleSender ssender=new SmsSingleSender(appId,appKey);
+//            SmsSingleSenderResult result=ssender.sendWithParam("86",sms.getPhoneNum(),templateId,
+//                    params,smsSign,"","");
+//            System.out.println(result);
+//        }catch (JSONException e){
+//            e.printStackTrace();
+//        }catch (IOException e){
+//            e.printStackTrace();
+//        } catch (HTTPException e) {
+//            e.printStackTrace();
+//        }
+//    }
 
 
 
