@@ -4,12 +4,9 @@ package com.cqupt.movies.third_part.controller;
 import com.cqupt.movies.common.utils.R;
 import com.cqupt.movies.third_part.vo.SmsVo;
 import com.cqupt.movies.third_part.component.SmsSendComponent;
-
-import org.json.JSONException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.io.IOException;
 
 @RestController
 @RequestMapping("/thirdpart/sms")
