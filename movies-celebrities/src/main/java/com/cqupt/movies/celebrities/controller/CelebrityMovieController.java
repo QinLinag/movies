@@ -6,6 +6,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 import com.alibaba.fastjson.TypeReference;
+import com.cqupt.movies.celebrities.exception.CelebrityMovieException;
 import com.cqupt.movies.celebrities.feign.MoviesFeignService;
 import com.cqupt.movies.celebrities.vo.MoviesVo;
 import com.cqupt.movies.common.utils.PageUtils;
@@ -35,9 +36,6 @@ public class CelebrityMovieController {
     @Autowired
     private CelebrityMovieService celebrityMovieService;
 
-    @Autowired
-    private MoviesFeignService moviesFeignService;
-
 
     /**
      * 点击某个明星参演电影,查询出这些电影，
@@ -46,28 +44,14 @@ public class CelebrityMovieController {
 
     @RequestMapping("/movies")
     public R listMoviesByCelebId(@RequestParam("celebId") Long celebId){
-        List<CelebrityMovieEntity> celebrityMovieEntities=celebrityMovieService.listByCelebId(celebId);
 
-        if (celebrityMovieEntities!=null&&celebrityMovieEntities.size()>0) {
-            List<Long> ids = celebrityMovieEntities.stream().map((item) -> {
-                return item.getMovieMid();
-            }).collect(Collectors.toList());
-            try {
-                R r = moviesFeignService.listByIds(ids);
-                if (r.getCode() == 0) {
-                    //远程查询电影成功
-                    List<MoviesVo> moviesEntities = r.getData("data", new TypeReference<List<MoviesVo>>() {
-                    });
-                    return R.ok().put("data", moviesEntities);
-                } else {
-                    return R.error(1, "远程调用时有异常");
-                }
-            }catch (Exception e){
-                return R.error(1,"查询电影时有异常");
-            }
-        }else {
-            return R.ok().put("data",null);
+        try {
+            List<MoviesVo> moviesEntities=celebrityMovieService.listMoviesByCelebId(celebId);
+            return R.ok().setData(moviesEntities);
+        }catch (CelebrityMovieException e){
+            return R.error(1,"远程调用出错了");
         }
+
     }
 
 

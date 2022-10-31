@@ -28,6 +28,8 @@ public class CelebritiesServiceImpl extends ServiceImpl<Dao, Entity> implements 
         return new PageUtils(page);
     }
 
+
+    //模糊查询电影，通过名字   中文名或英文名
     @Override
     public List<Entity> listByName(String name) {
         List<Entity> entities = this.getBaseMapper().selectList(new QueryWrapper<Entity>().like("name", name).or().like("english_name", name));

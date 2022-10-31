@@ -4,9 +4,7 @@ package com.cqupt.movies.third_part.controller;
 import com.cqupt.movies.common.utils.R;
 import com.cqupt.movies.third_part.vo.SmsVo;
 import com.cqupt.movies.third_part.component.SmsSendComponent;
-import com.github.qcloudsms.SmsSingleSender;
-import com.github.qcloudsms.SmsSingleSenderResult;
-import com.github.qcloudsms.httpclient.HTTPException;
+
 import org.json.JSONException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
