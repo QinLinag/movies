@@ -10,6 +10,7 @@ import com.cqupt.movies.movies.interceptor.MovieInterceptor;
 import com.cqupt.movies.movies.to.UserInfoTo;
 import com.cqupt.movies.movies.vo.CommentUpdateVo;
 import com.cqupt.movies.movies.vo.CommentVo;
+import oracle.jdbc.proxy.annotation.Post;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -36,20 +37,22 @@ public class CommentController {
 
 
     /**
-     * 保存一条评论，  前端已经判断了用户是否登入了的，只有用户登录了才能评论，
+     * 保存一条评论，  前端已经判断了用户是否登入了的，只有用户登录了才能评论，并且是当前用户
      *
-     * commentVo前端返回的数据
+     * commentVo前端请求的数据，
      */
-    @RequestMapping("/save")
+    @PostMapping("/save")
     public R save(@RequestBody CommentVo commentVo){
         //获得当前线程的用户
         UserInfoTo userInfoTo = MovieInterceptor.threadLocal.get();
 
-        if (userInfoTo.getUserId()!=null) {
+        if (userInfoTo.getUserId()!=null&&userInfoTo.getUserId()==commentVo.getMemberId()) {
             CommentEntity commentEntity = new CommentEntity();
-            BeanUtils.copyProperties(commentVo, commentEntity);  //拷贝
+            commentEntity.setContent(commentVo.getContent());
+            commentEntity.setMemberId(commentVo.getMemberId());
+            commentEntity.setMid(commentVo.getMid());
             commentEntity.setCreateTime(new Date());
-            commentEntity.setUpdate(new Date());
+            commentEntity.setUpdateTime(new Date());
             commentEntity.setMemberId(userInfoTo.getUserId());
             commentEntity.setPraseCount(0);
             commentService.save(commentEntity);
@@ -73,7 +76,7 @@ public class CommentController {
                 CommentEntity commentEntity = new CommentEntity();
                 BeanUtils.copyProperties(commentUpdateVo, commentEntity);
                 commentEntity.setPraseCount(commentDb.getPraseCount());
-                commentEntity.setUpdate(new Date());
+                commentEntity.setUpdateTime(new Date());
                 commentService.updateById(commentEntity);
                 return R.ok();
             }else {

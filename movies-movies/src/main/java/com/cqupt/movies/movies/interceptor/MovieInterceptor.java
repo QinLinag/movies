@@ -5,6 +5,7 @@ import com.cqupt.movies.common.constant.MovieConstant;
 import com.cqupt.movies.common.vo.MemberRespVo;
 import com.cqupt.movies.movies.to.UserInfoTo;
 import org.apache.commons.lang.StringUtils;
+import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 
 import javax.servlet.http.Cookie;
@@ -14,6 +15,7 @@ import javax.servlet.http.HttpSession;
 import java.util.UUID;
 
 
+@Component
 public class MovieInterceptor implements HandlerInterceptor {
 
     //将用户的信息保存在threadlocal中，

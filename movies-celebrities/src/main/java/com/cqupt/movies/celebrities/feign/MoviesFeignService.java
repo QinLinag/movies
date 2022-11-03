@@ -16,7 +16,7 @@ public interface MoviesFeignService {
     R listByIds(@RequestParam("ids") List<Long> ids);
 
 
-    @GetMapping("/list/movieids")
+    @GetMapping("/movies/infomovie/list/infomovies/bymovieids")
     R listByMovieIds(@RequestParam("movieIds") List<Long> movieIds);
 
 }

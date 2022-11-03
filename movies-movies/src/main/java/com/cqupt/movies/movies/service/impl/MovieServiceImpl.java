@@ -2,7 +2,7 @@ package com.cqupt.movies.movies.service.impl;
 
 import com.alibaba.fastjson.JSONObject;
 import com.cqupt.movies.common.constant.MovieConstant;
-import com.cqupt.movies.common.enume.MovieTagsEnum;
+import com.cqupt.movies.common.map.MovieTagsMap;
 import com.cqupt.movies.common.utils.PageUtils;
 import com.cqupt.movies.common.utils.Query;
 import com.cqupt.movies.movies.interceptor.MovieInterceptor;
@@ -10,7 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 
-import java.util.EnumMap;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -54,24 +54,23 @@ public class MovieServiceImpl extends ServiceImpl<MovieDao, MovieEntity> impleme
     }
 
     @Override
-    public List<MovieEntity> listByTags(List<Long> tags) {
+    public List<MovieEntity> listByTags(List<Integer> tags) {
+        System.out.println(tags.get(1));
         List<MovieEntity> entities = listAllMovies();  //先查出所有的电影
-        System.out.println("-------------------------------------------------------------先查出所有的电影");
         //前端返回的tags的id转化为对应在数据库中的tag名字
-        Map<Integer, String> map = MovieTagsEnum.getMap();
+        Map<Integer, String> map = MovieTagsMap.map;
         List<String> tagsString = tags.stream().map(tag -> {
+            System.out.println(map.get(tag));
             return map.get(tag);   //对应映射
         }).collect(Collectors.toList());
-        System.out.println("------------------------------------------------------------前端返回的tags的id转化为对应在数据库中的tag名字");
+        System.out.println(tagsString.toString());
 
 
         List<MovieEntity> collect = entities.stream().filter((entity) -> {   //根据tags进行过滤
             String[] strings = entity.getTags().split(",");    //分割
-            System.out.println(strings.toString());
             for (String tag : tagsString) {
                 for (String string : strings) {
                     if (tag==string) {
-                        System.out.println("------------------------------------------------------------- //根据tags进行过滤");
                         return true;
                     }
                 }
@@ -83,7 +82,7 @@ public class MovieServiceImpl extends ServiceImpl<MovieDao, MovieEntity> impleme
         String tagJsonMovies = JSONObject.toJSONString(collect);
         redisTemplate.opsForValue().set(MovieInterceptor.threadLocal.get().getUserKey()+ MovieConstant.TAG_NAME,tagJsonMovies);
 
-
+        System.out.println(collect.toString());
         return collect;
     }
 

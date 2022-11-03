@@ -1,6 +1,5 @@
 package com.cqupt.movies.movies.controller;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -19,7 +18,6 @@ import com.cqupt.movies.movies.service.InfoMovieService;
 
 import com.cqupt.movies.movies.vo.AllMoviesInfoVo;
 import com.cqupt.movies.movies.vo.CelebrityVo;
-import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
@@ -84,6 +82,8 @@ public class MovieController {
 
     /**
      * 点击某一部电影时，查找出参演的演员明星，封装为一个list集合，
+     *
+     * 前端页面请求带来一个电影的id
      * */
     @RequestMapping("/celebrities/{mid}")
     public R listCelebrityByMovie(@PathVariable("mid") Long mid){
@@ -91,7 +91,7 @@ public class MovieController {
         if (byId!=null){
             String substring = byId.getCelebrities().substring(1, byId.getCelebrities().length() - 2);
 
-            String[] celebIds = substring.split(", ");//具体每一个演员的id，
+            String[] celebIds = substring.split(", ");//具体每一个演员的id，  分割一下，
             List<String> strings = Arrays.stream(celebIds).toList();
             List<CelebrityVo> celebrityVos = strings.stream().map((s) -> {
                 R info = celebritiesFeignService.info(Long.valueOf(s));
@@ -114,6 +114,7 @@ public class MovieController {
     /**
      * 根据id批量查询电影
      *
+     * 供其他服务远程调用使用，
      * */
     @RequestMapping("/list/byids")
     public R listByIds(@RequestParam("ids") List<Long> ids){
@@ -127,10 +128,10 @@ public class MovieController {
     /**
      * 按照电影类型查找所有的电影， tag在数据库中是字符串，需要通过,分割所有的类型
      *
-     * 我们将查找过的电影保存到redis中，然后一遍排序等操作，以防再重数据库中差查一次，
+     * 我们将查找过的电影保存到redis中，然后，用于排序等操作，以防再重数据库中差查一次，
      * */
     @GetMapping("/list/tag")
-    public R listByTags(@RequestParam List<Long> tags){   //接收多个类型
+    public R listByTags(@RequestParam List<Integer> tags){   //接收多个类型
        List<MovieEntity> entities=movieService.listByTags(tags);
 
        return R.ok().setData(entities);

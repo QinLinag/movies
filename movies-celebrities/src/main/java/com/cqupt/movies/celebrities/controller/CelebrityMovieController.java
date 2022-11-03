@@ -51,7 +51,7 @@ public class CelebrityMovieController {
 
     /**
      *
-     * 选出明星参演过，点赞次数最多的那些电影，           后来想了一下，不如给指定的明星参演的电影排序，按照点赞次数，哎~
+     * 选出明星参演过的电影，按照点赞次数选择出front个点赞最多的几个电影，           后来想了一下，不如给指定的明星参演的电影排序，按照点赞次数，哎~
      * */
     @GetMapping("/movies/thumb")
     public R listMostThumbMovieByCelebId(@RequestParam("celebId") Long celebId,@RequestParam("front") Long front){
@@ -128,26 +128,5 @@ public class CelebrityMovieController {
         return R.ok();
     }
 
-    /**
-     * 修改
-     */
-    @RequestMapping("/update")
-    //@RequiresPermissions("celebrities:celebritymovie:update")
-    public R update(@RequestBody CelebrityMovieEntity celebrityMovie){
-		celebrityMovieService.updateById(celebrityMovie);
-
-        return R.ok();
-    }
-
-    /**
-     * 删除
-     */
-    @RequestMapping("/delete")
-    //@RequiresPermissions("celebrities:celebritymovie:delete")
-    public R delete(@RequestBody Long[] ids){
-		celebrityMovieService.removeByIds(Arrays.asList(ids));
-
-        return R.ok();
-    }
 
 }

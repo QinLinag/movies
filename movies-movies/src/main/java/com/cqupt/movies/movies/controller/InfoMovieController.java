@@ -174,7 +174,7 @@ public class InfoMovieController {
     /**
      * 通过电影id集合，查询出这些电影对应的信息
      * */
-    @GetMapping("/list/movieids")
+    @GetMapping("/list/infomovies/bymovieids")
     public R listByMovieIds(@RequestParam("movieIds") List<Long> movieIds){
         List<InfoMovieEntity> infoMovieEntities=infoMovieService.listByMovieIds(movieIds);
         return R.ok().setData(infoMovieEntities);

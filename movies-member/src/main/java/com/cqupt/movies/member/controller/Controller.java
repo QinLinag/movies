@@ -67,6 +67,9 @@ public class Controller {
            return R.error(BizCodeEnum.LOGINACCT_PASSWORD_INVALID_EXCEPTION.getCode(), BizCodeEnum.LOGINACCT_PASSWORD_INVALID_EXCEPTION.getMsg());
        }
     }
+
+
+
     /**
      * 列表
      */
@@ -88,15 +91,6 @@ public class Controller {
         return R.ok().put("", byId);
     }
 
-    /**
-     * 保存
-     */
-    @RequestMapping("/save")
-    public R save(@RequestBody Entity entity){
-		MemberService.save(entity);
-
-        return R.ok();
-    }
 
     /**
      * 修改

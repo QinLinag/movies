@@ -71,7 +71,6 @@ public class Controller {
      * 列表
      */
     @RequestMapping("/list")
-    //@RequiresPermissions("celebrities::list")
     public R list(@RequestParam Map<String, Object> params){
         PageUtils page = celebritiesService.queryPage(params);
 
@@ -108,17 +107,6 @@ public class Controller {
     //@RequiresPermissions("celebrities::update")
     public R update(@RequestBody Entity entity){
 		celebritiesService.updateById(entity);
-
-        return R.ok();
-    }
-
-    /**
-     * 删除
-     */
-    @RequestMapping("/delete")
-    //@RequiresPermissions("celebrities::delete")
-    public R delete(@RequestBody Long[] ids){
-		celebritiesService.removeByIds(Arrays.asList(ids));
 
         return R.ok();
     }

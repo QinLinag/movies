@@ -69,6 +69,8 @@ public class ThumbMovieController {
 
     /**
      * 通过用户id，和电影id查询用户点赞该电影的信息
+     *
+     * 给远程调用的movies服务使用，
      * */
     @GetMapping("/thumb/memberidandmovieid")
     public R selectThumbByMemberIdAndMovieId(@RequestParam("infoMovieVo")InfoMovieVo infoMovieVo){
@@ -101,6 +103,8 @@ public class ThumbMovieController {
 
     /**
      * 通过用户id和电影id保存一条用户点赞信息，
+     *
+     * 给movies服务远程调用使用
      */
     @RequestMapping("/save")
     public R save(@RequestParam("infoMovieVo") InfoMovieVo infoMovieVo){
@@ -117,6 +121,7 @@ public class ThumbMovieController {
 
     /**
      * 删除
+     * 给movies服务远程调用
      */
     @RequestMapping("/delete")
     public R delete(@RequestParam("infoMovieVo") InfoMovieVo infoMovieVo){

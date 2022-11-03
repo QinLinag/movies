@@ -60,24 +60,27 @@ public class CommentReplyController {
     @RequestMapping("/save")
     public R save(@RequestBody CommentReplyVo commentReplyVo){
         UserInfoTo userInfoTo = MovieInterceptor.threadLocal.get();
-        if (userInfoTo.getUserId()!=null&&userInfoTo.getUserId()==commentReplyVo.getMemberId()){
+        //if (userInfoTo.getUserId()!=null&&userInfoTo.getUserId()==commentReplyVo.getMemberId()){
             R r=commentReplyService.saveCommentReply(commentReplyVo);
             return R.ok();
-        }else{
-            return R.error(1,"请未登入，或者用户错误");
-        }
+       // }else{
+       //     return R.error(1,"请未登入，或者用户错误");
+        //}
     }
 
 
 
     /**
-     *    点赞数增加，
+     *    点赞数增加，    这个游客也可以点赞，无所谓的，
      */
-    @RequestMapping("/update")
-    public R update(@RequestBody CommentReplyEntity commentReply){
-		commentReplyService.updateById(commentReply);
-
-        return R.ok();
+    @RequestMapping("/update/praise")
+    public R update(@RequestBody CommentReplyVo commentReplyVo){
+        R r=commentReplyService.addPraise(commentReplyVo);
+        if (r.getCode()==0) {
+            return R.ok();
+        }else {
+            return R.error(1,"点赞失败");
+        }
     }
 
     /**
@@ -86,11 +89,11 @@ public class CommentReplyController {
     @RequestMapping("/delete")
     public R delete(@RequestBody CommentReplyVo commentReplyVo){
         UserInfoTo userInfoTo = MovieInterceptor.threadLocal.get();
-        if (userInfoTo.getUserId()!=null&&userInfoTo.getUserId()==commentReplyVo.getMemberId()){
+        //if (userInfoTo.getUserId()!=null&&userInfoTo.getUserId()==commentReplyVo.getMemberId()){
             R r=commentReplyService.removeCommentReply(commentReplyVo);
-        }else {
-            return R.error(1,"未登入或用户错误");
-        }
+        //}else {
+        //    return R.error(1,"未登入或用户错误");
+        //}
         return R.ok();
     }
 

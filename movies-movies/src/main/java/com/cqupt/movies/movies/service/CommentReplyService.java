@@ -35,5 +35,11 @@ public interface CommentReplyService extends IService<CommentReplyEntity> {
      * 删除一条评论
      * */
     R removeCommentReply(CommentReplyVo commentReplyVo);
+
+
+    /**
+     * 给回复点赞
+     * */
+    R addPraise(CommentReplyVo commentReplyVo);
 }
 

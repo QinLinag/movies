@@ -67,4 +67,17 @@ public class CommentReplyServiceImpl extends ServiceImpl<CommentReplyDao, Commen
 
     }
 
+    @Override
+    public R addPraise(CommentReplyVo commentReplyVo) {
+        CommentReplyEntity commentReplyEntity = this.baseMapper.selectById(commentReplyVo.getId());
+        if (commentReplyEntity!=null){
+            commentReplyEntity.setPraseCount(1+commentReplyEntity.getPraseCount());
+            this.baseMapper.updateById(commentReplyEntity);
+            return R.ok();
+        }else {
+            return R.error(1,"不存在这个回复");
+        }
+
+    }
+
 }
