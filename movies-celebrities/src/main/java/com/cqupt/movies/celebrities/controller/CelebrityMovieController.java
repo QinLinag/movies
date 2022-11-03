@@ -3,20 +3,13 @@ package com.cqupt.movies.celebrities.controller;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
-import com.alibaba.fastjson.TypeReference;
 import com.cqupt.movies.celebrities.exception.CelebrityMovieException;
-import com.cqupt.movies.celebrities.feign.MoviesFeignService;
 import com.cqupt.movies.celebrities.vo.MoviesVo;
 import com.cqupt.movies.common.utils.PageUtils;
 import com.cqupt.movies.common.utils.R;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.cqupt.movies.celebrities.entity.CelebrityMovieEntity;
 import com.cqupt.movies.celebrities.service.CelebrityMovieService;
@@ -46,6 +39,7 @@ public class CelebrityMovieController {
     public R listMoviesByCelebId(@RequestParam("celebId") Long celebId){
 
         try {
+                                                                //listMoviesByCelebId,这个函数中有远程调用movies这个微服务
             List<MoviesVo> moviesEntities=celebrityMovieService.listMoviesByCelebId(celebId);
             return R.ok().setData(moviesEntities);
         }catch (CelebrityMovieException e){
@@ -53,6 +47,53 @@ public class CelebrityMovieController {
         }
 
     }
+
+
+    /**
+     *
+     * 选出明星参演过，点赞次数最多的那些电影，           后来想了一下，不如给指定的明星参演的电影排序，按照点赞次数，哎~
+     * */
+    @GetMapping("/movies/thumb")
+    public R listMostThumbMovieByCelebId(@RequestParam("celebId") Long celebId,@RequestParam("front") Long front){
+        List<MoviesVo> mostThumbMovies=celebrityMovieService.listMostThumbMovieByCelebId(celebId,front);
+        if (mostThumbMovies==null){  //远程调用失败
+            return R.error(1,"远程调用失败");
+        }
+        return R.ok().setData(mostThumbMovies);
+    }
+
+    /**
+     * 选出明星产演过，看过次数最多的电影
+     * */
+    @GetMapping("/movies/watched")
+    public R listMostWatchedMovieByCelebId(@RequestParam("celebId") Long celebId,@RequestParam("front") Long front){
+        List<MoviesVo> mostThumbMovies=celebrityMovieService.listMostWatchedMovieByCelebId(celebId,front);
+        if (mostThumbMovies==null){  //远程调用失败
+            return R.error(1,"远程调用失败");
+        }
+        return R.ok().setData(mostThumbMovies);
+    }
+
+    /**
+     * 选出明星产演过，想看次数最多的电影
+     * */
+    @GetMapping("/movies/keen")
+    public R listMostKeenMovieByCelebId(@RequestParam("celebId") Long celebId,@RequestParam("front") Long front){
+        List<MoviesVo> mostThumbMovies=celebrityMovieService.listMostKeenMovieByCelebId(celebId,front);
+        if (mostThumbMovies==null){  //远程调用失败
+            return R.error(1,"远程调用失败");
+        }
+        return R.ok().setData(mostThumbMovies);
+    }
+
+
+
+
+
+
+
+
+
 
 
     /**

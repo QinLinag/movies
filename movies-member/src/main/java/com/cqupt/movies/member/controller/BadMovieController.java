@@ -3,18 +3,16 @@ package com.cqupt.movies.member.controller;
 import java.util.Arrays;
 import java.util.Map;
 
-//import org.apache.shiro.authz.annotation.RequiresPermissions;
+import com.cqupt.movies.common.utils.PageUtils;
+import com.cqupt.movies.common.utils.R;
+import com.cqupt.movies.member.entity.ThumbMovieEntity;
+import com.cqupt.movies.member.vo.InfoMovieVo;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.cqupt.movies.member.entity.BadMovieEntity;
 import com.cqupt.movies.member.service.BadMovieService;
-import com.cqupt.common.utils.PageUtils;
-import com.cqupt.common.utils.R;
+
 
 
 
@@ -30,6 +28,18 @@ import com.cqupt.common.utils.R;
 public class BadMovieController {
     @Autowired
     private BadMovieService badMovieService;
+
+    /**
+     * 通过用户id，和电影id查询用户点赞该电影的信息
+     * */
+    @GetMapping("/bad/memberidandmovieid")
+    public R selectBadByMemberIdAndMovieId(@RequestParam("infoMovieVo") InfoMovieVo infoMovieVo){
+        BadMovieEntity badMovieEntity=badMovieService.getByMemberIdAndMovieId(infoMovieVo);
+        return R.ok().setData(badMovieEntity);
+    }
+
+
+
 
     /**
      * 列表
@@ -55,36 +65,32 @@ public class BadMovieController {
     }
 
     /**
-     * 保存
+     * 通过用户id和电影id保存一条用户点赞信息，
      */
     @RequestMapping("/save")
-    //@RequiresPermissions("member:badmovie:save")
-    public R save(@RequestBody BadMovieEntity badMovie){
-		badMovieService.save(badMovie);
+    public R save(@RequestParam("infoMovieVo") InfoMovieVo infoMovieVo){
+        BadMovieEntity badMovieEntity = new BadMovieEntity();
+        badMovieEntity.setMovieId(infoMovieVo.getMovieId());
+        badMovieEntity.setMemberId(infoMovieVo.getMemberId());
+
+        badMovieService.save(badMovieEntity);
 
         return R.ok();
     }
 
-    /**
-     * 修改
-     */
-    @RequestMapping("/update")
-    //@RequiresPermissions("member:badmovie:update")
-    public R update(@RequestBody BadMovieEntity badMovie){
-		badMovieService.updateById(badMovie);
 
-        return R.ok();
-    }
 
     /**
      * 删除
      */
     @RequestMapping("/delete")
-    //@RequiresPermissions("member:badmovie:delete")
-    public R delete(@RequestBody Long[] ids){
-		badMovieService.removeByIds(Arrays.asList(ids));
-
-        return R.ok();
+    public R delete(@RequestParam("infoMovieVo") InfoMovieVo infoMovieVo){
+        R r=badMovieService.deleteByMemberIdAndMovieId(infoMovieVo);
+        if (r.getCode()==0) {
+            return R.ok();
+        }else {
+            return R.error(1,"删除失败");
+        }
     }
 
 }

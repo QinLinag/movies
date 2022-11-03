@@ -3,18 +3,15 @@ package com.cqupt.movies.member.controller;
 import java.util.Arrays;
 import java.util.Map;
 
-//import org.apache.shiro.authz.annotation.RequiresPermissions;
+import com.cqupt.movies.common.utils.PageUtils;
+import com.cqupt.movies.common.utils.R;
+import com.cqupt.movies.member.entity.ThumbMovieEntity;
+import com.cqupt.movies.member.vo.InfoMovieVo;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.cqupt.movies.member.entity.WatchedMovieEntity;
 import com.cqupt.movies.member.service.WatchedMovieService;
-import com.cqupt.common.utils.PageUtils;
-import com.cqupt.common.utils.R;
 
 
 
@@ -30,6 +27,17 @@ import com.cqupt.common.utils.R;
 public class WatchedMovieController {
     @Autowired
     private WatchedMovieService watchedMovieService;
+
+
+    /**
+     * 通过用户id，和电影id查询用户点赞该电影的信息
+     * */
+    @GetMapping("/watched/memberidandmovieid")
+    public R selectWatchedByMemberIdAndMovieId(@RequestParam("infoMovieVo") InfoMovieVo infoMovieVo){
+        WatchedMovieEntity watchMovieEntity=watchedMovieService.getByMemberIdAndMovieId(infoMovieVo);
+        return R.ok().setData(watchMovieEntity);
+    }
+
 
     /**
      * 列表
@@ -55,36 +63,32 @@ public class WatchedMovieController {
     }
 
     /**
-     * 保存
+     * 通过用户id和电影id保存一条用户点赞信息，
      */
     @RequestMapping("/save")
-    //@RequiresPermissions("member:watchedmovie:save")
-    public R save(@RequestBody WatchedMovieEntity watchedMovie){
-		watchedMovieService.save(watchedMovie);
+    public R save(@RequestParam("infoMovieVo") InfoMovieVo infoMovieVo){
+        WatchedMovieEntity watchedMovieEntity = new WatchedMovieEntity();
+        watchedMovieEntity.setMovieId(infoMovieVo.getMovieId());
+        watchedMovieEntity.setMemberId(infoMovieVo.getMemberId());
+
+        watchedMovieService.save(watchedMovieEntity);
 
         return R.ok();
     }
 
-    /**
-     * 修改
-     */
-    @RequestMapping("/update")
-    //@RequiresPermissions("member:watchedmovie:update")
-    public R update(@RequestBody WatchedMovieEntity watchedMovie){
-		watchedMovieService.updateById(watchedMovie);
-
-        return R.ok();
-    }
 
     /**
-     * 删除
+     * 删除   用户id电影id
      */
     @RequestMapping("/delete")
-    //@RequiresPermissions("member:watchedmovie:delete")
-    public R delete(@RequestBody Long[] ids){
-		watchedMovieService.removeByIds(Arrays.asList(ids));
-
-        return R.ok();
+    public R delete(@RequestParam("infoMovieVo") InfoMovieVo infoMovieVo){
+        R r=watchedMovieService.deleteByMemberIdAndMovieId(infoMovieVo);
+        if (r.getCode()==0) {
+            return R.ok();
+        }else {
+            return R.error(1,"删除失败");
+        }
     }
+
 
 }

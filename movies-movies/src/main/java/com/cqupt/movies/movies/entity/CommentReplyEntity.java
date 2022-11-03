@@ -25,6 +25,10 @@ public class CommentReplyEntity implements Serializable {
 	@TableId
 	private Long id;
 	/**
+	 * 该评论id
+	 * */
+	private Long commentId;
+	/**
 	 * 回复评论的用户id
 	 */
 	private Long memberId;

@@ -44,4 +44,9 @@ public class InfoMovieEntity implements Serializable {
 	 */
 	private Long keen;
 
+	/**
+	 * 差评数
+	 * */
+	private Long bad;
+
 }

@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import com.cqupt.movies.common.utils.PageUtils;
 import com.cqupt.movies.movies.entity.InfoMovieEntity;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -20,5 +21,9 @@ public interface InfoMovieService extends IService<InfoMovieEntity> {
 
     //按照电影id查找电影的信息
     InfoMovieEntity getByMid(Long mid);
+
+
+    //根据电影id集合批量查询，
+    List<InfoMovieEntity> listByMovieIds(List<Long> movieIds);
 }
 

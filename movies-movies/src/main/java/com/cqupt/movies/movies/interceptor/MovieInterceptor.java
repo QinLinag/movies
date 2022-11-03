@@ -6,7 +6,6 @@ import com.cqupt.movies.common.vo.MemberRespVo;
 import com.cqupt.movies.movies.to.UserInfoTo;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.web.servlet.HandlerInterceptor;
-import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;

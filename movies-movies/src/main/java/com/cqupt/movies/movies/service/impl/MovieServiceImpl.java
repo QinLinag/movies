@@ -81,7 +81,7 @@ public class MovieServiceImpl extends ServiceImpl<MovieDao, MovieEntity> impleme
 
         //将查出来的电影保存在redis缓存中，
         String tagJsonMovies = JSONObject.toJSONString(collect);
-        redisTemplate.opsForValue().set(MovieInterceptor.threadLocal.get()+ MovieConstant.TAG_NAME,tagJsonMovies);
+        redisTemplate.opsForValue().set(MovieInterceptor.threadLocal.get().getUserKey()+ MovieConstant.TAG_NAME,tagJsonMovies);
 
 
         return collect;

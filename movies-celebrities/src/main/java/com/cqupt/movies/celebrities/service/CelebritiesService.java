@@ -19,5 +19,9 @@ public interface CelebritiesService extends IService<Entity> {
     PageUtils queryPage(Map<String, Object> params);
 
     List<Entity> listByName(String name);
+
+    //查询出明星一共出演了多少部电影
+    Long countMoviesByCelebId(Long id);
+
 }
 

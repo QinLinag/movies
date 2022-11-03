@@ -72,33 +72,7 @@ public class CollectMovieController {
     }
 
 
-    /**
-     * 查询用户点赞的电影
-     */
-    @RequestMapping("/movies/thumb/{memberId}")
-    private R listThumbMoviesByMemberId(@PathVariable("memberId") Long memberId) {
-        //查询出用户id和收藏电影的实例
-        List<CollectMovieEntity> entities = collectMovieService.getCollectMovieEntityByMemberId(memberId);
-        if (entities != null && entities.size() > 0) {
-            List<Long> movieIds = entities.stream().map(entity -> {
-                return entity.getMovieId();
-            }).collect(Collectors.toList());
-            try {
-                R r = movieSFeignService.listByIds(movieIds);
-                if (r.getCode() == 0) {
-                    List<MovieVo> movieVos = r.getData("data", new TypeReference<List<MovieVo>>() {
-                    });
-                    return R.ok().put("data", movieVos);
-                } else {
-                    return R.error(1, "远程调用movies失败");
-                }
-            } catch (Exception e) {
-                return R.error(1, "查询电影出现异常");
-            }
-        } else {
-            return R.ok().put("data", null);
-        }
-    }
+
 
 
 

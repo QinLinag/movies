@@ -3,10 +3,14 @@ package com.cqupt.movies.celebrities.controller;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 
+import com.cqupt.movies.celebrities.feign.MoviesFeignService;
+import com.cqupt.movies.celebrities.vo.CelebrityInfoVo;
 import com.cqupt.movies.common.utils.PageUtils;
 import com.cqupt.movies.common.utils.R;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -31,8 +35,7 @@ import com.cqupt.movies.celebrities.service.CelebritiesService;
 @RequestMapping("celebrities/")
 public class Controller {
     @Autowired
-    private CelebritiesService CelebritiesService;
-
+    private CelebritiesService celebritiesService;
 
 
 
@@ -43,9 +46,24 @@ public class Controller {
      * */
     @RequestMapping("/list/{name}")
     public R listByName(@PathVariable("name") String name){
-        List<Entity> entity=CelebritiesService.listByName(name);
-        return R.ok().put("data",entity);
+        //模糊查询所有明星的基本信息
+        List<Entity> entities=celebritiesService.listByName(name);
+
+        //查询明星出演电影部数    其实明星参演电影多少部可以保存一个字段在明星表中，但是懒得改了，
+        List<CelebrityInfoVo> allCelebrity = entities.stream().map(entity -> {
+            CelebrityInfoVo celebrityInfoVo = new CelebrityInfoVo();
+            BeanUtils.copyProperties(entity, celebrityInfoVo);  //拷贝数据到返回前端的对象里，
+            Long id = entity.getId();
+            Long count = celebritiesService.countMoviesByCelebId(id);
+            celebrityInfoVo.setMoviesCount(count);
+            return celebrityInfoVo;
+        }).collect(Collectors.toList());
+
+        return R.ok().put("data",allCelebrity);
     }
+
+
+
 
 
 
@@ -55,7 +73,7 @@ public class Controller {
     @RequestMapping("/list")
     //@RequiresPermissions("celebrities::list")
     public R list(@RequestParam Map<String, Object> params){
-        PageUtils page = CelebritiesService.queryPage(params);
+        PageUtils page = celebritiesService.queryPage(params);
 
         return R.ok().put("page", page);
     }
@@ -67,7 +85,7 @@ public class Controller {
     @RequestMapping("/info/{id}")
     //@RequiresPermissions("celebrities::info")
     public R info(@PathVariable("id") Long id){
-        Entity byId = CelebritiesService.getById(id);
+        Entity byId = celebritiesService.getById(id);
 
         return R.ok().setData( byId);
     }
@@ -78,7 +96,7 @@ public class Controller {
     @RequestMapping("/save")
     //@RequiresPermissions("celebrities::save")
     public R save(@RequestBody Entity entity){
-		CelebritiesService.save(entity);
+		celebritiesService.save(entity);
 
         return R.ok();
     }
@@ -89,7 +107,7 @@ public class Controller {
     @RequestMapping("/update")
     //@RequiresPermissions("celebrities::update")
     public R update(@RequestBody Entity entity){
-		CelebritiesService.updateById(entity);
+		celebritiesService.updateById(entity);
 
         return R.ok();
     }
@@ -100,7 +118,7 @@ public class Controller {
     @RequestMapping("/delete")
     //@RequiresPermissions("celebrities::delete")
     public R delete(@RequestBody Long[] ids){
-		CelebritiesService.removeByIds(Arrays.asList(ids));
+		celebritiesService.removeByIds(Arrays.asList(ids));
 
         return R.ok();
     }

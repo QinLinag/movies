@@ -1,8 +1,10 @@
 package com.cqupt.movies.movies.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.cqupt.common.utils.PageUtils;
+import com.cqupt.movies.common.utils.PageUtils;
+import com.cqupt.movies.common.utils.R;
 import com.cqupt.movies.movies.entity.CommentEntity;
+import com.cqupt.movies.movies.vo.CommentUpdateVo;
 
 import java.util.Map;
 
@@ -16,5 +18,12 @@ import java.util.Map;
 public interface CommentService extends IService<CommentEntity> {
 
     PageUtils queryPage(Map<String, Object> params);
+
+    //删除一条评论的方法，
+    R deleteCommentByCommentId(Long id);
+
+
+    //修改评论点赞数
+    R updateCommentPraise(CommentUpdateVo commentUpdateVo);
 }
 

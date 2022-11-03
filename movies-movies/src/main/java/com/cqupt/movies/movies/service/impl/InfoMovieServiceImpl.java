@@ -3,6 +3,8 @@ package com.cqupt.movies.movies.service.impl;
 import com.cqupt.movies.common.utils.PageUtils;
 import com.cqupt.movies.common.utils.Query;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 import java.util.Map;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
@@ -31,6 +33,13 @@ public class InfoMovieServiceImpl extends ServiceImpl<InfoMovieDao, InfoMovieEnt
 
         InfoMovieEntity entity = this.getBaseMapper().selectOne(new QueryWrapper<InfoMovieEntity>().eq("mid", mid));
         return entity;
+    }
+
+    @Override
+    public List<InfoMovieEntity> listByMovieIds(List<Long> movieIds) {
+        List<InfoMovieEntity> infoMovieEntities = this.baseMapper.selectList(new QueryWrapper<InfoMovieEntity>().in(true, "mid", movieIds));
+        return infoMovieEntities;
+
     }
 
 }

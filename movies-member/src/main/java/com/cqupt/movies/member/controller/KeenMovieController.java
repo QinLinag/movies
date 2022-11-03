@@ -3,18 +3,15 @@ package com.cqupt.movies.member.controller;
 import java.util.Arrays;
 import java.util.Map;
 
-//import org.apache.shiro.authz.annotation.RequiresPermissions;
+import com.cqupt.movies.common.utils.PageUtils;
+import com.cqupt.movies.common.utils.R;
+import com.cqupt.movies.member.entity.ThumbMovieEntity;
+import com.cqupt.movies.member.vo.InfoMovieVo;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.cqupt.movies.member.entity.KeenMovieEntity;
 import com.cqupt.movies.member.service.KeenMovieService;
-import com.cqupt.common.utils.PageUtils;
-import com.cqupt.common.utils.R;
 
 
 
@@ -30,6 +27,19 @@ import com.cqupt.common.utils.R;
 public class KeenMovieController {
     @Autowired
     private KeenMovieService keenMovieService;
+
+
+
+    /**
+     * 通过用户id，和电影id查询用户点赞该电影的信息
+     * */
+    @GetMapping("/keen/memberidandmovieid")
+    public R selectKeenByMemberIdAndMovieId(@RequestParam("infoMovieVo") InfoMovieVo infoMovieVo){
+        KeenMovieEntity keenMovieEntity=keenMovieService.getByMemberIdAndMovieId(infoMovieVo);
+        return R.ok().setData(keenMovieEntity);
+    }
+
+
 
     /**
      * 列表
@@ -55,36 +65,32 @@ public class KeenMovieController {
     }
 
     /**
-     * 保存
+     * 通过用户id和电影id保存一条用户点赞信息，
      */
     @RequestMapping("/save")
-    //@RequiresPermissions("member:keenmovie:save")
-    public R save(@RequestBody KeenMovieEntity keenMovie){
-		keenMovieService.save(keenMovie);
+    public R save(@RequestParam("infoMovieVo") InfoMovieVo infoMovieVo){
+        KeenMovieEntity keenMovieEntity = new KeenMovieEntity();
+        keenMovieEntity.setMovieId(infoMovieVo.getMovieId());
+        keenMovieEntity.setMemberId(infoMovieVo.getMemberId());
+
+        keenMovieService.save(keenMovieEntity);
 
         return R.ok();
     }
 
-    /**
-     * 修改
-     */
-    @RequestMapping("/update")
-    //@RequiresPermissions("member:keenmovie:update")
-    public R update(@RequestBody KeenMovieEntity keenMovie){
-		keenMovieService.updateById(keenMovie);
 
-        return R.ok();
-    }
 
     /**
      * 删除
      */
     @RequestMapping("/delete")
-    //@RequiresPermissions("member:keenmovie:delete")
-    public R delete(@RequestBody Long[] ids){
-		keenMovieService.removeByIds(Arrays.asList(ids));
-
-        return R.ok();
+    public R delete(@RequestParam("infoMovieVo") InfoMovieVo infoMovieVo){
+        R r=keenMovieService.deleteByMemberIdAndMovieId(infoMovieVo);
+        if (r.getCode()==0) {
+            return R.ok();
+        }else {
+            return R.error(1,"删除失败");
+        }
     }
 
 }

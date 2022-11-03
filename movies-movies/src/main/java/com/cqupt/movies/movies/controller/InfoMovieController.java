@@ -1,16 +1,19 @@
 package com.cqupt.movies.movies.controller;
 
 import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 
+import com.alibaba.fastjson.TypeReference;
 import com.cqupt.movies.common.utils.PageUtils;
 import com.cqupt.movies.common.utils.R;
+import com.cqupt.movies.movies.feign.MemberFeignService;
+import com.cqupt.movies.movies.interceptor.MovieInterceptor;
+import com.cqupt.movies.movies.to.UserInfoTo;
+import com.cqupt.movies.movies.vo.InfoMovieVo;
+import com.cqupt.movies.movies.vo.MovieInfo;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.cqupt.movies.movies.entity.InfoMovieEntity;
 import com.cqupt.movies.movies.service.InfoMovieService;
@@ -30,46 +33,152 @@ public class InfoMovieController {
     @Autowired
     private InfoMovieService infoMovieService;
 
+    @Autowired
+    private MemberFeignService memberFeignService;
+
 
     /**
-     * 给电影点赞  点击已看   点击想看
+     * 电影点赞  点击已看   点击想看    给差评
+     *但是如果用户已经点赞了，再次点赞那么就是取消电赞，，已看、想看、差评也是一样，
+     * 所以每次我们先查一下这个表，判断用户是否已经点赞完成，
+     *
+     * 点赞这些，我们也设定只有登入了才能够进行
      * */
     @RequestMapping("/thumbup")
-    public R thumbUp(@RequestParam("mid") Long mid){
-        InfoMovieEntity entity=infoMovieService.getByMid(mid);
-        if (entity!=null){
-            entity.setThumbUp(entity.getThumbUp()+1);
-            infoMovieService.updateById(entity);
-            return R.ok();
-        }else{
-            return R.error(2,"电影不存在");
+    public R thumbUp(@RequestParam("infoMovieVo") InfoMovieVo infoMovieVo){
+        UserInfoTo userInfoTo = MovieInterceptor.threadLocal.get();
+        if (userInfoTo.getUserId()!=null&&userInfoTo.getUserId()==infoMovieVo.getMemberId()) {
+            //先查看该用户是否已经点赞该电影，如果已经点赞就取消电赞，
+            //远程调用Member服务，查询
+            R r = memberFeignService.selectWatchedByMemberIdAndMovieId(infoMovieVo);
+            if (r.getData("data",new TypeReference<MovieInfo>(){})==null){   //这里说明用户没有给该电影点过赞
+                InfoMovieEntity entity = infoMovieService.getByMid(infoMovieVo.getMovieId());
+                if (entity != null) {
+                    entity.setThumbUp(entity.getThumbUp() + 1);
+                    infoMovieService.updateById(entity);
+                    //同时还要将点赞信息添加到用户信息中，
+                    memberFeignService.saveThumbInfo(infoMovieVo);
+                    return R.ok();
+                } else {
+                    return R.error(2, "电影不存在");
+                }
+            }else {   //已经给该电影点过赞，现在应该是取消电赞，
+                //删除用户信息保存的点赞该电影信息，   并且将该电影点赞次数减一
+                R delete = memberFeignService.deleteThumbInfo(infoMovieVo);
+                if (delete.getCode()==0){
+                    InfoMovieEntity entity = infoMovieService.getByMid(infoMovieVo.getMovieId());
+                    entity.setThumbUp(entity.getThumbUp()-1);
+                    infoMovieService.updateById(entity);
+                    return R.ok();
+                }else {
+                    return R.error(1,"取消点赞失败");
+                }
+            }
+
+        }else {
+            return R.error(1,"用户未登入或者登入错误");
         }
     }
 
     @RequestMapping("/watched")
-    public R watched(@RequestParam("mid") Long mid){
-        InfoMovieEntity entity=infoMovieService.getByMid(mid);
-        if (entity!=null){
-            entity.setWatched(entity.getWatched()+1);
-            infoMovieService.updateById(entity);
-            return R.ok();
-        }else{
-            return R.error(2,"电影不存在");
+    public R watched(@RequestParam("infoMovieVo") InfoMovieVo infoMovieVo){
+        UserInfoTo userInfoTo = MovieInterceptor.threadLocal.get();
+        if (userInfoTo.getUserId()!=null&&userInfoTo.getUserId()==infoMovieVo.getMemberId()) {
+            //查询用户已看该电影信息
+            R r = memberFeignService.selectWatchedByMemberIdAndMovieId(infoMovieVo);
+            if (r.getData("data",new TypeReference<MovieInfo>(){})==null) {     //还未点击已看
+                InfoMovieEntity entity = infoMovieService.getByMid(infoMovieVo.getMovieId());
+                if (entity != null) {
+                    entity.setWatched(entity.getWatched() + 1);
+                    infoMovieService.updateById(entity);
+                    //保存到用户的电影已看信息中，
+                    memberFeignService.saveWatchedInfo(infoMovieVo);
+                    return R.ok();
+                } else {
+                    return R.error(2, "电影不存在");
+                }
+            }else {    //已经点击过已看，应该取消
+                memberFeignService.deleteWatchedInfo(infoMovieVo);
+                //已看电影数减一
+                InfoMovieEntity entity = infoMovieService.getByMid(infoMovieVo.getMovieId());
+                entity.setWatched(entity.getWatched());
+                infoMovieService.updateById(entity);
+                return R.ok();
+            }
+        }else {
+            return R.error(1,"未登录或登录错误");
         }
     }
 
     @RequestMapping("/keen")
-    public R keen(@RequestParam("mid") Long mid){
-        InfoMovieEntity entity=infoMovieService.getByMid(mid);
-        if (entity!=null){
-            entity.setKeen(entity.getKeen()+1);
-            infoMovieService.updateById(entity);
-            return R.ok();
-        }else{
-            return R.error(2,"电影不存在");
+    public R keen(@RequestParam("infoMovieVo") InfoMovieVo infoMovieVo){
+        UserInfoTo userInfoTo = MovieInterceptor.threadLocal.get();
+        if (userInfoTo.getUserId()!=null&&userInfoTo.getUserId()==infoMovieVo.getMemberId()) {
+            //查询用户想看该电影信息
+            R r = memberFeignService.selectKeenByMemberIdAndMovieId(infoMovieVo);
+            if (r.getData("data",new TypeReference<MovieInfo>(){})==null) {     //还未点击已看
+                InfoMovieEntity entity = infoMovieService.getByMid(infoMovieVo.getMovieId());
+                if (entity != null) {
+                    entity.setKeen(entity.getKeen() + 1);
+                    infoMovieService.updateById(entity);
+                    //保存到用户的电影已看信息中，
+                    memberFeignService.saveKeenInfo(infoMovieVo);
+                    return R.ok();
+                } else {
+                    return R.error(2, "电影不存在");
+                }
+            }else {    //已经点击过已看，应该取消
+                memberFeignService.deleteKeenInfo(infoMovieVo);
+                //已看电影数减一
+                InfoMovieEntity entity = infoMovieService.getByMid(infoMovieVo.getMovieId());
+                entity.setKeen(entity.getKeen());
+                infoMovieService.updateById(entity);
+                return R.ok();
+            }
+        }else {
+            return R.error(1,"未登录或登录错误");
         }
     }
 
+    @RequestMapping("/bad")
+    public R bad(@RequestParam("infoMovieVo") InfoMovieVo infoMovieVo){
+        UserInfoTo userInfoTo = MovieInterceptor.threadLocal.get();
+        if (userInfoTo.getUserId()!=null&&userInfoTo.getUserId()==infoMovieVo.getMemberId()) {
+            //查询用户想看该电影信息
+            R r = memberFeignService.selectBadByMemberIdAndMovieId(infoMovieVo);
+            if (r.getData("data",new TypeReference<MovieInfo>(){})==null) {     //还未点击已看
+                InfoMovieEntity entity = infoMovieService.getByMid(infoMovieVo.getMovieId());
+                if (entity != null) {
+                    entity.setBad(entity.getBad() + 1);
+                    infoMovieService.updateById(entity);
+                    //保存到用户的电影已看信息中，
+                    memberFeignService.saveBadInfo(infoMovieVo);
+                    return R.ok();
+                } else {
+                    return R.error(2, "电影不存在");
+                }
+            }else {    //已经点击过已看，应该取消
+                memberFeignService.deleteBadInfo(infoMovieVo);
+                //已看电影数减一
+                InfoMovieEntity entity = infoMovieService.getByMid(infoMovieVo.getMovieId());
+                entity.setBad(entity.getBad());
+                infoMovieService.updateById(entity);
+                return R.ok();
+            }
+        }else {
+            return R.error(1,"未登录或登录错误");
+        }
+    }
+
+
+    /**
+     * 通过电影id集合，查询出这些电影对应的信息
+     * */
+    @GetMapping("/list/movieids")
+    public R listByMovieIds(@RequestParam("movieIds") List<Long> movieIds){
+        List<InfoMovieEntity> infoMovieEntities=infoMovieService.listByMovieIds(movieIds);
+        return R.ok().setData(infoMovieEntities);
+    }
 
 
     /**

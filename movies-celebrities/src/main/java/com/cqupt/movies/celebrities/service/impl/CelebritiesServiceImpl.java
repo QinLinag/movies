@@ -37,4 +37,10 @@ public class CelebritiesServiceImpl extends ServiceImpl<Dao, Entity> implements 
 
     }
 
+    @Override
+    public Long countMoviesByCelebId(Long id) {
+        Long count = this.baseMapper.selectCount(new QueryWrapper<Entity>().eq("id", id));
+        return count;
+    }
+
 }

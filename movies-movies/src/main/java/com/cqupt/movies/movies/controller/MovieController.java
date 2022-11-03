@@ -146,7 +146,7 @@ public class MovieController {
     @GetMapping("/sort/thumbup/{flag}")   //标志位  0-dec   其他-inc
     public R sortByThumbUp(@PathVariable("flag") Integer flag){
         //已经查过的电影在redis中保存着的，
-        String tagJsonMovies = redisTemplate.opsForValue().get(MovieInterceptor.threadLocal.get() + MovieConstant.TAG_NAME);
+        String tagJsonMovies = redisTemplate.opsForValue().get(MovieInterceptor.threadLocal.get().getUserKey() + MovieConstant.TAG_NAME);
         List<MovieEntity> tagMoves = JSONObject.parseObject(tagJsonMovies, new TypeReference<List<MovieEntity>>() {
         });
 
@@ -191,7 +191,7 @@ public class MovieController {
     @GetMapping("/sort/watched/{flag}")   //标志位  0-dec   其他-inc
     public R sortByWatched(@PathVariable("flag") Integer flag){
         //已经查过的电影在redis中保存着的，
-        String tagJsonMovies = redisTemplate.opsForValue().get(MovieInterceptor.threadLocal.get() + MovieConstant.TAG_NAME);
+        String tagJsonMovies = redisTemplate.opsForValue().get(MovieInterceptor.threadLocal.get().getUserKey() + MovieConstant.TAG_NAME);
         List<MovieEntity> tagMoves = JSONObject.parseObject(tagJsonMovies, new TypeReference<List<MovieEntity>>() {
         });
 

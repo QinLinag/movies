@@ -25,5 +25,15 @@ public interface CelebrityMovieService extends IService<CelebrityMovieEntity> {
 
     //通过明星的id查询其出演的电影
     List<MoviesVo> listMoviesByCelebId(Long celebId);
+
+
+    //查询出明星所出演的电影中，点赞最多的几部电影，
+    List<MoviesVo> listMostThumbMovieByCelebId(Long celebId,Long front);
+
+    //查询出明星所出演的电影中，看过最多的几部电影，
+    List<MoviesVo> listMostWatchedMovieByCelebId(Long celebId, Long front);
+
+    //查询出明星所出演的电影中，想看最多的几部电影，
+    List<MoviesVo> listMostKeenMovieByCelebId(Long celebId, Long front);
 }
 
