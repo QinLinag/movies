@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
@@ -55,7 +56,6 @@ public class MovieServiceImpl extends ServiceImpl<MovieDao, MovieEntity> impleme
 
     @Override
     public List<MovieEntity> listByTags(List<Integer> tags) {
-        System.out.println(tags.get(1));
         List<MovieEntity> entities = listAllMovies();  //先查出所有的电影
         //前端返回的tags的id转化为对应在数据库中的tag名字
         Map<Integer, String> map = MovieTagsMap.map;
@@ -70,7 +70,31 @@ public class MovieServiceImpl extends ServiceImpl<MovieDao, MovieEntity> impleme
             String[] strings = entity.getTags().split(",");    //分割
             for (String tag : tagsString) {
                 for (String string : strings) {
-                    if (tag==string) {
+                    if (tag.equals(string)) {
+                        return true;
+                    }
+                }
+            }
+            return false;
+        }).collect(Collectors.toList());
+
+        //将查出来的电影保存在redis缓存中，
+        String tagJsonMovies = JSONObject.toJSONString(collect);
+        System.out.println(tagJsonMovies);
+        redisTemplate.opsForValue().set(MovieInterceptor.threadLocal.get().getUserKey()+ MovieConstant.TAG_NAME,tagJsonMovies,30, TimeUnit.MINUTES);
+        System.out.println(MovieInterceptor.threadLocal.get().getUserKey());
+        return collect;
+    }
+
+    @Override
+    public List<MovieEntity> listByTagsString(List<String> tags) {
+        List<MovieEntity> entities = listAllMovies();  //先查出所有的电影
+
+        List<MovieEntity> collect = entities.stream().filter((entity) -> {   //根据tags进行过滤
+            String[] strings = entity.getTags().split(",");    //分割
+            for (String tag : tags) {
+                for (String string : strings) {
+                    if (tag.equals(string)) {
                         return true;
                     }
                 }
@@ -81,8 +105,6 @@ public class MovieServiceImpl extends ServiceImpl<MovieDao, MovieEntity> impleme
         //将查出来的电影保存在redis缓存中，
         String tagJsonMovies = JSONObject.toJSONString(collect);
         redisTemplate.opsForValue().set(MovieInterceptor.threadLocal.get().getUserKey()+ MovieConstant.TAG_NAME,tagJsonMovies);
-
-        System.out.println(collect.toString());
         return collect;
     }
 

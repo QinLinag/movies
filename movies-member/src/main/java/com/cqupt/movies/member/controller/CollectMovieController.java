@@ -41,7 +41,7 @@ public class CollectMovieController {
 
     /**
      * 查询用户的收藏的所有电影，
-     */
+     * */
     @RequestMapping("/movies/collect/{memberId}")
     private R listCollectMoviesByMemberId(@PathVariable("memberId") Long memberId) {
 

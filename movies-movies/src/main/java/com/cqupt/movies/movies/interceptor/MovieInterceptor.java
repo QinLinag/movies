@@ -7,6 +7,7 @@ import com.cqupt.movies.movies.to.UserInfoTo;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
+import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
@@ -35,31 +36,45 @@ public class MovieInterceptor implements HandlerInterceptor {
             Cookie[] cookies = request.getCookies();
             if (cookies!=null&&cookies.length>0){
                 for (Cookie cookie : cookies) {
-                    String name = cookie.getName();   //用户的名字保存在cookie中，
+                    String name = cookie.getName();   //取出userkey，
                     if (name.equals(MovieConstant.TEMP_USER_NAME)){   //看看是不是临时用户，
                         userInfoTo.setUserKey(cookie.getValue());
                         userInfoTo.setTempUser(true);
+                        return true;
                     }
                 }
             }
         }
 
-        //如果没有临时用户一定分配一个临时用户
+
+        if(member==null) {
+            Cookie[] cookies = request.getCookies();
+            for (Cookie cookie : cookies) {
+                if (cookie.getName().equals( MovieConstant.TEMP_USER_NAME)) {
+                    System.out.println("getValue"+cookie.getValue());
+                    userInfoTo.setUserKey(cookie.getValue());
+                }
+            }
+        }
+
+        //如果没有userkey，就分配一个，
         if(StringUtils.isEmpty(userInfoTo.getUserKey())){   //临时用户是否已经有了userKey,
             String uuid = UUID.randomUUID().toString();
+            System.out.println(uuid);
             userInfoTo.setUserKey(uuid);
+            Cookie cookie = new Cookie(MovieConstant.TEMP_USER_NAME, userInfoTo.getUserKey());
+            cookie.setMaxAge(MovieConstant.TEMP_USER_COOKIE_TIMEOUT);
+            cookie.setPath("/");
+            response.addCookie(cookie);
         }
+
 
         //拦截器放行前，
         threadLocal.set(userInfoTo);
             return true;
     }
 
-
-//    //业务执行后
-//    @Override
-//    public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler, ModelAndView modelAndView) throws Exception {
-//
-//
-//    }
+    @Override
+    public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler, ModelAndView modelAndView) throws Exception {
+    }
 }

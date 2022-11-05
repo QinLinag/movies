@@ -94,6 +94,7 @@ public class MovieController {
             String[] celebIds = substring.split(", ");//具体每一个演员的id，  分割一下，
             List<String> strings = Arrays.stream(celebIds).collect(Collectors.toList());
             List<CelebrityVo> celebrityVos = strings.stream().map((s) -> {
+                //远程调用
                 R info = celebritiesFeignService.info(Long.valueOf(s));
                 if (info != null) {
                     CelebrityVo celebrityEntity =info.getData("data",new TypeReference<CelebrityVo>(){});
@@ -137,6 +138,16 @@ public class MovieController {
        return R.ok().setData(entities);
     }
 
+    /**
+     * 最开始想前端返回tag字符串，但是都来想，这样不是很好，
+     * 然后想前端传数字，然后我这里映射成string  所以就用/list/tag这个接口
+     * */
+    @GetMapping("/list/tagstring")
+    public R listByTagsString(@RequestParam List<String > tags){   //接收多个类型
+        List<MovieEntity> entities=movieService.listByTagsString(tags);
+
+        return R.ok().setData(entities);
+    }
 
 
     /**
@@ -148,6 +159,8 @@ public class MovieController {
     public R sortByThumbUp(@PathVariable("flag") Integer flag){
         //已经查过的电影在redis中保存着的，
         String tagJsonMovies = redisTemplate.opsForValue().get(MovieInterceptor.threadLocal.get().getUserKey() + MovieConstant.TAG_NAME);
+        System.out.println(tagJsonMovies);
+        System.out.println(MovieInterceptor.threadLocal.get().getUserKey());
         List<MovieEntity> tagMoves = JSONObject.parseObject(tagJsonMovies, new TypeReference<List<MovieEntity>>() {
         });
 
@@ -158,10 +171,13 @@ public class MovieController {
                     Long mid1 = tagMovie1.getMid();  //电影id
                     Long mid2 = tagMovie2.getMid();  //电影id
                     InfoMovieEntity byMid1 = infoMovieService.getByMid(mid1);
-                    InfoMovieEntity byMid2 = infoMovieService.getByMid(mid1);
-                    Long thumbUp1 = byMid1.getThumbUp();
-                    Long thumbUp2 = byMid2.getThumbUp();
-                    int sort = (int) (thumbUp1 - thumbUp2);
+                    InfoMovieEntity byMid2 = infoMovieService.getByMid(mid2);
+                    int sort =0;
+                    if (byMid1!=null&&byMid2!=null) {
+                        Long thumbUp1 = byMid1.getThumbUp();
+                        Long thumbUp2 = byMid2.getThumbUp();
+                        sort = (int) (thumbUp1 - thumbUp2);
+                    }
                     return sort;
                 }).collect(Collectors.toList());
                 return R.ok().setData(collect);
@@ -171,9 +187,13 @@ public class MovieController {
                     Long mid2 = tagMovie2.getMid();  //电影id
                     InfoMovieEntity byMid1 = infoMovieService.getByMid(mid1);
                     InfoMovieEntity byMid2 = infoMovieService.getByMid(mid1);
-                    Long thumbUp1 = byMid1.getThumbUp();
-                    Long thumbUp2 = byMid2.getThumbUp();
-                    int sort = (int) (thumbUp2 - thumbUp1);
+                    int sort =0;
+                    if (byMid1!=null&&byMid2!=null) {
+                        Long thumbUp1 = byMid1.getThumbUp();
+                        Long thumbUp2 = byMid2.getThumbUp();
+                        sort=(int) (thumbUp2 - thumbUp1);
+                    }
+
                     return sort;
                 }).collect(Collectors.toList());
                 return R.ok().setData(collect);
@@ -203,10 +223,14 @@ public class MovieController {
                     Long mid1 = tagMovie1.getMid();  //电影id
                     Long mid2 = tagMovie2.getMid();  //电影id
                     InfoMovieEntity byMid1 = infoMovieService.getByMid(mid1);
-                    InfoMovieEntity byMid2 = infoMovieService.getByMid(mid1);
-                    Long watched1 = byMid1.getWatched();
-                    Long watched2 = byMid2.getWatched();
-                    int sort = (int) (watched1 - watched2);
+                    InfoMovieEntity byMid2 = infoMovieService.getByMid(mid2);
+                    int sort=0;
+                    if (byMid1!=null&&byMid2!=null) {
+                        Long watched1 = byMid1.getWatched();
+                        Long watched2 = byMid2.getWatched();
+                        sort = (int) (watched1 - watched2);
+                    }
+
                     return sort;
                 }).collect(Collectors.toList());
                 return R.ok().setData(collect);
@@ -216,9 +240,12 @@ public class MovieController {
                     Long mid2 = tagMovie2.getMid();  //电影id
                     InfoMovieEntity byMid1 = infoMovieService.getByMid(mid1);
                     InfoMovieEntity byMid2 = infoMovieService.getByMid(mid1);
-                    Long watched1 = byMid1.getWatched();
-                    Long watched2 = byMid2.getWatched();
-                    int sort = (int) (watched2 - watched1);
+                    int sort=0;
+                    if (byMid1!=null&&byMid2!=null) {
+                        Long watched1 = byMid1.getWatched();
+                        Long watched2 = byMid2.getWatched();
+                        sort = (int) (watched2 - watched1);
+                    }
                     return sort;
                 }).collect(Collectors.toList());
                 return R.ok().setData(collect);

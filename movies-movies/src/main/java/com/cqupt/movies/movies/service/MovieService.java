@@ -23,5 +23,7 @@ public interface MovieService extends IService<MovieEntity> {
     List<MovieEntity> listAllMovies();
 
     List<MovieEntity> listByTags(List<Integer> tags);
+
+    List<MovieEntity> listByTagsString(List<String> tags);
 }
 

@@ -51,7 +51,7 @@ public class CelebrityMovieController {
 
     /**
      *
-     * 选出明星参演过的电影，按照点赞次数选择出front个点赞最多的几个电影，           后来想了一下，不如给指定的明星参演的电影排序，按照点赞次数，哎~
+     * 查询出明星参演过的电影，按照点赞次数选择出front个点赞最多的几个电影，           后来想了一下，不如给指定的明星参演的电影排序，按照点赞次数，哎~
      * */
     @GetMapping("/movies/thumb")
     public R listMostThumbMovieByCelebId(@RequestParam("celebId") Long celebId,@RequestParam("front") Long front){
