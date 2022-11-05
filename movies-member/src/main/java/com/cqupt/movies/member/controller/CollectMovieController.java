@@ -121,15 +121,5 @@ public class CollectMovieController {
         return R.ok();
     }
 
-    /**
-     * 删除
-     */
-    @RequestMapping("/delete")
-    //@RequiresPermissions("member:collectmovie:delete")
-    public R delete(@RequestBody Long[] ids){
-		collectMovieService.removeByIds(Arrays.asList(ids));
-
-        return R.ok();
-    }
 
 }

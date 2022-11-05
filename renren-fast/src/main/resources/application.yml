@@ -44,7 +44,7 @@ spring:
   cloud:
     nacos:
       discovery:
-        server-addr: 121.41.37.105:8848
+        server-addr: 114.55.39.64:8848
 #  resources:
 #    add-mappings: false
 

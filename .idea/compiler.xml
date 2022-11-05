@@ -17,15 +17,15 @@
         <module name="movies-gateway" />
       </profile>
     </annotationProcessing>
-    <bytecodeTargetLevel>
+    <bytecodeTargetLevel target="1.8">
       <module name="movies" target="1.5" />
-      <module name="movies-auth-server" target="17" />
-      <module name="movies-celebrities" target="17" />
-      <module name="movies-common" target="18" />
-      <module name="movies-gateway" target="17" />
-      <module name="movies-member" target="17" />
-      <module name="movies-movies" target="17" />
-      <module name="movies-third-part" target="17" />
+      <module name="movies-auth-server" target="1.8" />
+      <module name="movies-celebrities" target="1.8" />
+      <module name="movies-common" target="1.8" />
+      <module name="movies-gateway" target="1.8" />
+      <module name="movies-member" target="1.8" />
+      <module name="movies-movies" target="1.8" />
+      <module name="movies-third-part" target="1.8" />
       <module name="renren-fast" target="1.8" />
     </bytecodeTargetLevel>
   </component>

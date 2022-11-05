@@ -92,7 +92,7 @@ public class MovieController {
             String substring = byId.getCelebrities().substring(1, byId.getCelebrities().length() - 2);
 
             String[] celebIds = substring.split(", ");//具体每一个演员的id，  分割一下，
-            List<String> strings = Arrays.stream(celebIds).toList();
+            List<String> strings = Arrays.stream(celebIds).collect(Collectors.toList());
             List<CelebrityVo> celebrityVos = strings.stream().map((s) -> {
                 R info = celebritiesFeignService.info(Long.valueOf(s));
                 if (info != null) {

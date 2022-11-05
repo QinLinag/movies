@@ -9,16 +9,20 @@
     <description>聚合服务</description>
     <packaging>pom</packaging>
 
+
+
     <modules>
         <module>movies-celebrities</module>
         <module>movies-member</module>
         <module>movies-movies</module>
-        <module>movies-common</module>
         <module>renren-fast</module>
         <module>movies-common</module>
         <module>movies-gateway</module>
         <module>movies-third-part</module>
         <module>movies-auth-server</module>
     </modules>
+
+
+
 
 </project>

@@ -1,11 +1,9 @@
 package com.cqupt.movies.member.controller;
 
-import java.util.Arrays;
 import java.util.Map;
 
 import com.cqupt.movies.common.utils.PageUtils;
 import com.cqupt.movies.common.utils.R;
-import com.cqupt.movies.member.entity.ThumbMovieEntity;
 import com.cqupt.movies.member.vo.InfoMovieVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
