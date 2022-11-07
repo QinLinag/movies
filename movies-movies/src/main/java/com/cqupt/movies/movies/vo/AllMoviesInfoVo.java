@@ -4,6 +4,7 @@ package com.cqupt.movies.movies.vo;
 import com.baomidou.mybatisplus.annotation.TableId;
 import lombok.Data;
 
+import java.math.BigDecimal;
 import java.util.Date;
 
 
@@ -70,6 +71,10 @@ public class AllMoviesInfoVo {
     private Long keen;
 
 
+    /**
+     * 评分
+     * */
+    private BigDecimal grade;
 
 
 

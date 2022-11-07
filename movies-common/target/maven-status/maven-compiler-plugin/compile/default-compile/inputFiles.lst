@@ -1,6 +1,7 @@
 E:\movies\movies\movies-common\src\main\java\com\cqupt\movies\common\utils\HttpUtils.java
 E:\movies\movies\movies-common\src\main\java\com\cqupt\movies\common\xss\HTMLFilter.java
 E:\movies\movies\movies-common\src\main\java\com\cqupt\movies\common\exception\BizCodeEnum.java
+E:\movies\movies\movies-common\src\main\java\com\cqupt\movies\common\to\CreateMemberInfoTo.java
 E:\movies\movies\movies-common\src\main\java\com\cqupt\movies\common\utils\Constant.java
 E:\movies\movies\movies-common\src\main\java\com\cqupt\movies\common\utils\PageUtils.java
 E:\movies\movies\movies-common\src\main\java\com\cqupt\movies\common\constant\AuthServerConstant.java

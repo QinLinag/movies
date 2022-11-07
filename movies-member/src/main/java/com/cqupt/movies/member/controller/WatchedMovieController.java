@@ -32,8 +32,8 @@ public class WatchedMovieController {
     /**
      * 通过用户id，和电影id查询用户点赞该电影的信息
      * */
-    @GetMapping("/watched/memberidandmovieid")
-    public R selectWatchedByMemberIdAndMovieId(@RequestParam("infoMovieVo") InfoMovieVo infoMovieVo){
+    @PostMapping("/watched/memberidandmovieid")
+    public R selectWatchedByMemberIdAndMovieId(@RequestBody InfoMovieVo infoMovieVo){
         WatchedMovieEntity watchMovieEntity=watchedMovieService.getByMemberIdAndMovieId(infoMovieVo);
         return R.ok().setData(watchMovieEntity);
     }
@@ -66,7 +66,7 @@ public class WatchedMovieController {
      * 通过用户id和电影id保存一条用户点赞信息，
      */
     @RequestMapping("/save")
-    public R save(@RequestParam("infoMovieVo") InfoMovieVo infoMovieVo){
+    public R save(@RequestBody InfoMovieVo infoMovieVo){
         WatchedMovieEntity watchedMovieEntity = new WatchedMovieEntity();
         watchedMovieEntity.setMovieId(infoMovieVo.getMovieId());
         watchedMovieEntity.setMemberId(infoMovieVo.getMemberId());
@@ -81,7 +81,7 @@ public class WatchedMovieController {
      * 删除   用户id电影id
      */
     @RequestMapping("/delete")
-    public R delete(@RequestParam("infoMovieVo") InfoMovieVo infoMovieVo){
+    public R delete(@RequestBody InfoMovieVo infoMovieVo){
         R r=watchedMovieService.deleteByMemberIdAndMovieId(infoMovieVo);
         if (r.getCode()==0) {
             return R.ok();

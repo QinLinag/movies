@@ -13,6 +13,7 @@ import com.cqupt.movies.member.entity.CollectMovieEntity;
 import com.cqupt.movies.member.feign.MovieSFeignService;
 import com.cqupt.movies.member.vo.InfoMovieVo;
 import com.cqupt.movies.member.vo.MovieVo;
+import oracle.jdbc.proxy.annotation.Post;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -72,8 +73,8 @@ public class ThumbMovieController {
      *
      * 给远程调用的movies服务使用，
      * */
-    @GetMapping("/thumb/memberidandmovieid")
-    public R selectThumbByMemberIdAndMovieId(@RequestParam("infoMovieVo")InfoMovieVo infoMovieVo){
+    @PostMapping("/thumb/memberidandmovieid")
+    public R selectThumbByMemberIdAndMovieId(@RequestBody InfoMovieVo infoMovieVo){
         ThumbMovieEntity thumbMovieEntity=thumbMovieService.getByMemberIdAndMovieId(infoMovieVo);
         return R.ok().setData(thumbMovieEntity);
     }
@@ -107,7 +108,7 @@ public class ThumbMovieController {
      * 给movies服务远程调用使用
      */
     @RequestMapping("/save")
-    public R save(@RequestParam("infoMovieVo") InfoMovieVo infoMovieVo){
+    public R save(@RequestBody InfoMovieVo infoMovieVo){
         ThumbMovieEntity thumbMovieEntity = new ThumbMovieEntity();
         thumbMovieEntity.setMovieId(infoMovieVo.getMovieId());
         thumbMovieEntity.setMemberId(infoMovieVo.getMemberId());
@@ -124,7 +125,7 @@ public class ThumbMovieController {
      * 给movies服务远程调用
      */
     @RequestMapping("/delete")
-    public R delete(@RequestParam("infoMovieVo") InfoMovieVo infoMovieVo){
+    public R delete(@RequestBody InfoMovieVo infoMovieVo){
         R r=thumbMovieService.deleteByMemberIdAndMovieId(infoMovieVo);
         if (r.getCode()==0) {
             return R.ok();

@@ -1,14 +1,15 @@
-package com.cqupt.movies.member.vo;
+package com.cqupt.movies.movies.vo;
 
 
+import com.baomidou.mybatisplus.annotation.TableId;
 import lombok.Data;
 
 import java.math.BigDecimal;
 
 @Data
-public class InfoMovieVo {
+public class GradeMovieInfoVo {
 
-    private Long statusEntityId;
+    private Long id;
 
     private Long memberId;
 

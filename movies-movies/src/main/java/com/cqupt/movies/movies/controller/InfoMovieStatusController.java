@@ -7,11 +7,7 @@ import java.util.Map;
 import com.cqupt.movies.common.utils.PageUtils;
 import com.cqupt.movies.common.utils.R;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.cqupt.movies.movies.entity.InfoMovieStatusEntity;
 import com.cqupt.movies.movies.service.InfoMovieStatusService;
@@ -30,6 +26,14 @@ import com.cqupt.movies.movies.service.InfoMovieStatusService;
 public class InfoMovieStatusController {
     @Autowired
     private InfoMovieStatusService infoMovieStatusService;
+
+    @PostMapping("/list/statusid")
+    public R getById(@RequestParam("statusid") Long statusid){
+        InfoMovieStatusEntity byId = infoMovieStatusService.getById(statusid);
+        System.out.println("++++++++++++++++++++++++++++");
+        return R.ok().setData(byId);
+    }
+
 
     /**
      * 列表

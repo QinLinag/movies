@@ -3,6 +3,7 @@ package com.cqupt.movies.movies.service;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.cqupt.movies.common.utils.PageUtils;
 import com.cqupt.movies.movies.entity.InfoMovieEntity;
+import com.cqupt.movies.movies.vo.InfoMovieVo;
 
 import java.util.List;
 import java.util.Map;
@@ -25,5 +26,7 @@ public interface InfoMovieService extends IService<InfoMovieEntity> {
 
     //根据电影id集合批量查询，
     List<InfoMovieEntity> listByMovieIds(List<Long> movieIds);
+
+    void updateInfoMovie(InfoMovieVo infoMovieVo);
 }
 

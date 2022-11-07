@@ -16,8 +16,13 @@ spring:
     port: 6379
     host: 121.41.37.105
 
-    jackson:
-      date-format: yyyy-MM-dd HH:mm:ss    #json的时间格式
+  jackson:
+    date-format: yyyy-MM-dd HH:mm:ss    #json的时间格式
+  rabbitmq:
+    username: guest
+    password: guest
+    host: 114.55.39.64
+    virtual-host: /
 
 mybatis-plus:
   mapper-locations: classpath:/mapper/**/*.xml

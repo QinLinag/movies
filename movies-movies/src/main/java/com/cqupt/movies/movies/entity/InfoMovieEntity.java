@@ -4,6 +4,8 @@ import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
+
 import lombok.Data;
 
 /**
@@ -49,4 +51,19 @@ public class InfoMovieEntity implements Serializable {
 	 * */
 	private Long bad;
 
+	/**
+	 * 评分
+	 * */
+	private BigDecimal grade;
+
+	/**
+	 * 评过分的人
+	 * */
+	private Long gradePeople;
+
+
+	/**
+	 * 总评分
+	 * */
+	private BigDecimal allGrade;
 }

@@ -33,8 +33,8 @@ public class KeenMovieController {
     /**
      * 通过用户id，和电影id查询用户点赞该电影的信息
      * */
-    @GetMapping("/keen/memberidandmovieid")
-    public R selectKeenByMemberIdAndMovieId(@RequestParam("infoMovieVo") InfoMovieVo infoMovieVo){
+    @PostMapping("/keen/memberidandmovieid")
+    public R selectKeenByMemberIdAndMovieId(@RequestBody InfoMovieVo infoMovieVo){
         KeenMovieEntity keenMovieEntity=keenMovieService.getByMemberIdAndMovieId(infoMovieVo);
         return R.ok().setData(keenMovieEntity);
     }
@@ -68,7 +68,7 @@ public class KeenMovieController {
      * 通过用户id和电影id保存一条用户点赞信息，
      */
     @RequestMapping("/save")
-    public R save(@RequestParam("infoMovieVo") InfoMovieVo infoMovieVo){
+    public R save(@RequestBody InfoMovieVo infoMovieVo){
         KeenMovieEntity keenMovieEntity = new KeenMovieEntity();
         keenMovieEntity.setMovieId(infoMovieVo.getMovieId());
         keenMovieEntity.setMemberId(infoMovieVo.getMemberId());
@@ -84,7 +84,7 @@ public class KeenMovieController {
      * 删除
      */
     @RequestMapping("/delete")
-    public R delete(@RequestParam("infoMovieVo") InfoMovieVo infoMovieVo){
+    public R delete(@RequestBody InfoMovieVo infoMovieVo){
         R r=keenMovieService.deleteByMemberIdAndMovieId(infoMovieVo);
         if (r.getCode()==0) {
             return R.ok();

@@ -42,8 +42,8 @@ under the License.
         </library>
       </orderEntry>
      -->  
-    <output url="file://$MODULE_DIR$/target/classes"/>
-    <output-test url="file://$MODULE_DIR$/target/test-classes"/>
+    <output url="file://$MODULE_DIR$/target/classes"/>  
+    <output-test url="file://$MODULE_DIR$/target/test-classes"/> 
   </component>  
   <component name="ModuleRootManager"/>  
   <!-- If it's a war project:

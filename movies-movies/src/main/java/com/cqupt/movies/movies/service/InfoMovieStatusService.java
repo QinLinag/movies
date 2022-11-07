@@ -3,6 +3,7 @@ package com.cqupt.movies.movies.service;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.cqupt.movies.common.utils.PageUtils;
 import com.cqupt.movies.movies.entity.InfoMovieStatusEntity;
+import com.cqupt.movies.movies.vo.InfoMovieVo;
 
 import java.util.Map;
 
@@ -16,5 +17,7 @@ import java.util.Map;
 public interface InfoMovieStatusService extends IService<InfoMovieStatusEntity> {
 
     PageUtils queryPage(Map<String, Object> params);
+
+    InfoMovieStatusEntity getByMemberIdAndMovieId(InfoMovieVo infoMovieVo);
 }
 

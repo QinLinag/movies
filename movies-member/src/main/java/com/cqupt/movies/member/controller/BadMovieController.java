@@ -30,8 +30,8 @@ public class BadMovieController {
     /**
      * 通过用户id，和电影id查询用户点赞该电影的信息
      * */
-    @GetMapping("/bad/memberidandmovieid")
-    public R selectBadByMemberIdAndMovieId(@RequestParam("infoMovieVo") InfoMovieVo infoMovieVo){
+    @PostMapping("/bad/memberidandmovieid")
+    public R selectBadByMemberIdAndMovieId(@RequestBody InfoMovieVo infoMovieVo){
         BadMovieEntity badMovieEntity=badMovieService.getByMemberIdAndMovieId(infoMovieVo);
         return R.ok().setData(badMovieEntity);
     }
@@ -66,7 +66,7 @@ public class BadMovieController {
      * 通过用户id和电影id保存一条用户点赞信息，
      */
     @RequestMapping("/save")
-    public R save(@RequestParam("infoMovieVo") InfoMovieVo infoMovieVo){
+    public R save(@RequestBody InfoMovieVo infoMovieVo){
         BadMovieEntity badMovieEntity = new BadMovieEntity();
         badMovieEntity.setMovieId(infoMovieVo.getMovieId());
         badMovieEntity.setMemberId(infoMovieVo.getMemberId());
@@ -82,7 +82,7 @@ public class BadMovieController {
      * 删除
      */
     @RequestMapping("/delete")
-    public R delete(@RequestParam("infoMovieVo") InfoMovieVo infoMovieVo){
+    public R delete(@RequestBody InfoMovieVo infoMovieVo){
         R r=badMovieService.deleteByMemberIdAndMovieId(infoMovieVo);
         if (r.getCode()==0) {
             return R.ok();

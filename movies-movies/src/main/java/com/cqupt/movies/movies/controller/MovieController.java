@@ -1,5 +1,6 @@
 package com.cqupt.movies.movies.controller;
 
+import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -70,6 +71,7 @@ public class MovieController {
                     allMoviesInfoVo.setCollect(infoMovieEntity.getCollect());
                     allMoviesInfoVo.setKeen(infoMovieEntity.getKeen());
                     allMoviesInfoVo.setWatched(infoMovieEntity.getWatched());
+                    allMoviesInfoVo.setGrade(infoMovieEntity.getGrade());
                     return allMoviesInfoVo;
                 }
                 return allMoviesInfoVo;
@@ -150,6 +152,64 @@ public class MovieController {
     }
 
 
+
+
+    /**
+     * 按照评分排序查询，   升序或降序
+     *
+     * 前提也是已经通过类型查询过电影
+     * */
+    @GetMapping("/sort/grade/{flag}")
+    public R sortByGrade(@PathVariable("flag") Integer flag){
+        //已经查过的电影在redis中保存着的，
+        String tagJsonMovies = redisTemplate.opsForValue().get(MovieInterceptor.threadLocal.get().getUserKey() + MovieConstant.TAG_NAME);
+        List<MovieEntity> tagMoves = JSONObject.parseObject(tagJsonMovies, new TypeReference<List<MovieEntity>>() {
+        });
+        if (tagMoves!=null&&tagMoves.size()>0) {
+
+            if (flag == 0) {  //降序
+                List<MovieEntity> collect = tagMoves.stream().sorted((tagMovie1, tagMovie2) -> {
+                    Long mid1 = tagMovie1.getMid();  //电影id
+                    Long mid2 = tagMovie2.getMid();  //电影id
+                    InfoMovieEntity byMid1 = infoMovieService.getByMid(mid1);
+                    InfoMovieEntity byMid2 = infoMovieService.getByMid(mid2);
+                    int sort =0;
+                    if (byMid1!=null&&byMid2!=null) {
+                        BigDecimal grade1 = byMid1.getGrade();
+                        BigDecimal grade2 = byMid2.getGrade();
+                        BigDecimal subtract = grade1.subtract(grade2);
+                        sort=subtract.compareTo(new BigDecimal("0"));
+                    }
+                    return sort;
+                }).collect(Collectors.toList());
+                return R.ok().setData(collect);
+            } else {   //升序
+                List<MovieEntity> collect = tagMoves.stream().sorted((tagMovie1, tagMovie2) -> {
+                    Long mid1 = tagMovie1.getMid();  //电影id
+                    Long mid2 = tagMovie2.getMid();  //电影id
+                    InfoMovieEntity byMid1 = infoMovieService.getByMid(mid1);
+                    InfoMovieEntity byMid2 = infoMovieService.getByMid(mid1);
+                    int sort =0;
+                    if (byMid1!=null&&byMid2!=null) {
+                        BigDecimal grade1 = byMid1.getGrade();
+                        BigDecimal grade2 = byMid2.getGrade();
+                        BigDecimal subtract = grade2.subtract(grade1);
+                        sort=subtract.compareTo(new BigDecimal("0"));
+                    }
+
+                    return sort;
+                }).collect(Collectors.toList());
+                return R.ok().setData(collect);
+            }
+        }else {    //在redis中没有这个用户通过tag搜索过的电影
+            return R.error(1,"没有电影");
+        }
+    }
+
+
+
+
+
     /**
      * 按照点赞数量升序排列查询    或者降序排序查询
      *
@@ -159,8 +219,6 @@ public class MovieController {
     public R sortByThumbUp(@PathVariable("flag") Integer flag){
         //已经查过的电影在redis中保存着的，
         String tagJsonMovies = redisTemplate.opsForValue().get(MovieInterceptor.threadLocal.get().getUserKey() + MovieConstant.TAG_NAME);
-        System.out.println(tagJsonMovies);
-        System.out.println(MovieInterceptor.threadLocal.get().getUserKey());
         List<MovieEntity> tagMoves = JSONObject.parseObject(tagJsonMovies, new TypeReference<List<MovieEntity>>() {
         });
 

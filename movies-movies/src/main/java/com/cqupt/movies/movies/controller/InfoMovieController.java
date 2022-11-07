@@ -1,18 +1,25 @@
 package com.cqupt.movies.movies.controller;
 
+import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 import com.alibaba.fastjson.TypeReference;
 import com.cqupt.movies.common.utils.PageUtils;
 import com.cqupt.movies.common.utils.R;
+import com.cqupt.movies.movies.entity.InfoMovieStatusEntity;
 import com.cqupt.movies.movies.feign.MemberFeignService;
 import com.cqupt.movies.movies.interceptor.MovieInterceptor;
+import com.cqupt.movies.movies.service.InfoMovieStatusService;
 import com.cqupt.movies.movies.to.UserInfoTo;
+import com.cqupt.movies.movies.vo.GradeMovieInfoVo;
 import com.cqupt.movies.movies.vo.InfoMovieVo;
 import com.cqupt.movies.movies.vo.MovieInfo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import com.cqupt.movies.movies.entity.InfoMovieEntity;
@@ -36,6 +43,51 @@ public class InfoMovieController {
     @Autowired
     private MemberFeignService memberFeignService;
 
+    @Autowired
+    private InfoMovieStatusService infoMovieStatusService;
+
+
+
+
+    /**
+     * 评分， 只有用户登入了才能评分，   如果用户早已评过，那么就无法再次评分  1-10分，
+     * */
+    @Transactional
+    @PostMapping("/grade")
+    public R grade(@RequestBody InfoMovieVo infoMovieVo){
+        //判断用户是否登入
+        UserInfoTo userInfoTo = MovieInterceptor.threadLocal.get();
+        //if (userInfoTo.getUserId()!=null&&userInfoTo.getUserId()==infoMovieVo.getMemberId()){   //该用户登入，
+            //远程调用member服务，查询用户是否已经评分过了，
+        System.out.println(infoMovieVo.getMemberId()+"  "+ infoMovieVo.getMovieId());
+            R r = memberFeignService.selectGradeByMemberIdAndMovieId(infoMovieVo);
+            if (r.getData("data",new TypeReference<GradeMovieInfoVo>(){})==null){   //未评过分
+
+                InfoMovieStatusEntity infoMovieStatusEntity = new InfoMovieStatusEntity();
+                infoMovieStatusEntity.setMovieId(infoMovieVo.getMovieId());
+                infoMovieStatusEntity.setMemberId(infoMovieVo.getMemberId());
+                infoMovieStatusEntity.setStatus(0L);    //未完成，
+                infoMovieStatusService.save(infoMovieStatusEntity);  //保存到数据库，，自动生成id主键
+
+                InfoMovieStatusEntity infoMovieStatusEntity1=infoMovieStatusService.getByMemberIdAndMovieId(infoMovieVo);
+                infoMovieVo.setStatusEntityId(infoMovieStatusEntity1.getId());
+
+                memberFeignService.saveGrade(infoMovieVo);
+                //改变电影的评分，
+                infoMovieService.updateInfoMovie(infoMovieVo);
+                infoMovieStatusEntity1.setStatus(1L);   //当电影的评分修改成功后，就将状态设置为已完成
+                infoMovieStatusService.updateById(infoMovieStatusEntity1);
+
+                return R.ok();
+            }else {   //已经评过分，无法在评分
+                return R.error(2,"该用户已经评过分");
+            }
+        //}else {  //该用户未登入
+          //  return R.error(1,"用户登入信息错误");
+        //}
+    }
+
+
 
     /**
      * 电影点赞  点击已看   点击想看    给差评
@@ -44,13 +96,14 @@ public class InfoMovieController {
      *
      * 点赞这些，我们也设定只有登入了才能够进行
      * */
-    @RequestMapping("/thumbup")
-    public R thumbUp(@RequestParam("infoMovieVo") InfoMovieVo infoMovieVo){
+    @Transactional
+    @PostMapping("/thumbup")
+    public R thumbUp(@RequestBody InfoMovieVo infoMovieVo){
         UserInfoTo userInfoTo = MovieInterceptor.threadLocal.get();
         if (userInfoTo.getUserId()!=null&&userInfoTo.getUserId()==infoMovieVo.getMemberId()) {
             //先查看该用户是否已经点赞该电影，如果已经点赞就取消电赞，
             //远程调用Member服务，查询
-            R r = memberFeignService.selectWatchedByMemberIdAndMovieId(infoMovieVo);
+            R r = memberFeignService.selectThumbByMemberIdAndMovieId(infoMovieVo);
             if (r.getData("data",new TypeReference<MovieInfo>(){})==null){   //这里说明用户没有给该电影点过赞
                 InfoMovieEntity entity = infoMovieService.getByMid(infoMovieVo.getMovieId());
                 if (entity != null) {
@@ -80,8 +133,9 @@ public class InfoMovieController {
         }
     }
 
+    @Transactional
     @RequestMapping("/watched")
-    public R watched(@RequestParam("infoMovieVo") InfoMovieVo infoMovieVo){
+    public R watched(@RequestBody InfoMovieVo infoMovieVo){
         UserInfoTo userInfoTo = MovieInterceptor.threadLocal.get();
         if (userInfoTo.getUserId()!=null&&userInfoTo.getUserId()==infoMovieVo.getMemberId()) {
             //查询用户已看该电影信息
@@ -110,8 +164,9 @@ public class InfoMovieController {
         }
     }
 
-    @RequestMapping("/keen")
-    public R keen(@RequestParam("infoMovieVo") InfoMovieVo infoMovieVo){
+    @Transactional
+    @PostMapping("/keen")
+    public R keen(@RequestBody InfoMovieVo infoMovieVo){
         UserInfoTo userInfoTo = MovieInterceptor.threadLocal.get();
         if (userInfoTo.getUserId()!=null&&userInfoTo.getUserId()==infoMovieVo.getMemberId()) {
             //查询用户想看该电影信息
@@ -140,8 +195,9 @@ public class InfoMovieController {
         }
     }
 
+    @Transactional
     @RequestMapping("/bad")
-    public R bad(@RequestParam("infoMovieVo") InfoMovieVo infoMovieVo){
+    public R bad(@RequestBody InfoMovieVo infoMovieVo){
         UserInfoTo userInfoTo = MovieInterceptor.threadLocal.get();
         if (userInfoTo.getUserId()!=null&&userInfoTo.getUserId()==infoMovieVo.getMemberId()) {
             //查询用户想看该电影信息

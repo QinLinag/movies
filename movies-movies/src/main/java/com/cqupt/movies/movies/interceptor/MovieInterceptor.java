@@ -1,8 +1,8 @@
 package com.cqupt.movies.movies.interceptor;
 
 import com.cqupt.movies.common.constant.AuthServerConstant;
-import com.cqupt.movies.common.constant.MovieConstant;
 import com.cqupt.movies.common.vo.MemberRespVo;
+import com.cqupt.movies.movies.constant.MovieConstant;
 import com.cqupt.movies.movies.to.UserInfoTo;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.stereotype.Component;
@@ -49,10 +49,12 @@ public class MovieInterceptor implements HandlerInterceptor {
 
         if(member==null) {
             Cookie[] cookies = request.getCookies();
-            for (Cookie cookie : cookies) {
-                if (cookie.getName().equals( MovieConstant.TEMP_USER_NAME)) {
-                    System.out.println("getValue"+cookie.getValue());
-                    userInfoTo.setUserKey(cookie.getValue());
+            if (cookies!=null&&cookies.length>0) {
+                for (Cookie cookie : cookies) {
+                    if (cookie.getName().equals(MovieConstant.TEMP_USER_NAME)) {
+                        System.out.println("getValue" + cookie.getValue());
+                        userInfoTo.setUserKey(cookie.getValue());
+                    }
                 }
             }
         }

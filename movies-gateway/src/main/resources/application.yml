@@ -8,9 +8,9 @@ spring:
             - Path=/celebrities/**
 
         - id: movies_member_route
-          uri: lb://movies-member
+          uri: lb://movies-member    #跳转的服务
           predicates:
-            - Path=/member/**
+            - Path=/member/**     #跳转路径
 
         - id: movies_movies_route
           uri: lb://movies-movies

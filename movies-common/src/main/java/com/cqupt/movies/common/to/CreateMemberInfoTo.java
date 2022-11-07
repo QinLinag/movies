@@ -1,12 +1,15 @@
-package com.cqupt.movies.member.vo;
+package com.cqupt.movies.common.to;
 
 
 import lombok.Data;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 
 @Data
-public class InfoMovieVo {
+public class CreateMemberInfoTo implements Serializable {
+
+    private Long id;
 
     private Long statusEntityId;
 
@@ -15,6 +18,5 @@ public class InfoMovieVo {
     private Long movieId;
 
     private BigDecimal grade;
-
 
 }
