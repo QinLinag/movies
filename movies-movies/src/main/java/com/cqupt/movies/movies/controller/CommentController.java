@@ -46,7 +46,7 @@ public class CommentController {
         //获得当前线程的用户
         UserInfoTo userInfoTo = MovieInterceptor.threadLocal.get();
 
-        if (userInfoTo.getUserId()!=null&&userInfoTo.getUserId()==commentVo.getMemberId()) {
+        //if (userInfoTo.getUserId()!=null&&userInfoTo.getUserId()==commentVo.getMemberId()) {
             CommentEntity commentEntity = new CommentEntity();
             commentEntity.setContent(commentVo.getContent());
             commentEntity.setMemberId(commentVo.getMemberId());
@@ -57,9 +57,9 @@ public class CommentController {
             commentEntity.setPraseCount(0);
             commentService.save(commentEntity);
             return R.ok();
-        }else {
-            return R.error(1,"用户未登入，所以无法评论");
-        }
+        //}else {
+           // return R.error(1,"用户未登入，所以无法评论");
+        //}
     }
 
 
@@ -69,7 +69,7 @@ public class CommentController {
     @PostMapping("/update/content")
     public R updateContent(@RequestBody CommentUpdateVo commentUpdateVo){
         UserInfoTo userInfoTo = MovieInterceptor.threadLocal.get();
-        if (userInfoTo.getUserId()!=null&&userInfoTo.getUserId()==commentUpdateVo.getMemberId()){  //只有登入了的用户才能,并且登入的用户必须是该评论的用户
+       // if (userInfoTo.getUserId()!=null&&userInfoTo.getUserId()==commentUpdateVo.getMemberId()){  //只有登入了的用户才能,并且登入的用户必须是该评论的用户
             //还要区数据库查一遍是否有该评论
             CommentEntity commentDb = commentService.getById(commentUpdateVo.getId());
             if (commentDb!=null) { //数据库中存在
@@ -83,9 +83,9 @@ public class CommentController {
                 //数据库中不存在，
                 return R.error(1,"该评论不存在");
             }
-        }else {
-            return R.error(1,"用户未登入或不能修改他人评论");
-        }
+        //}else {
+            //return R.error(1,"用户未登入或不能修改他人评论");
+        //}
     }
 
 

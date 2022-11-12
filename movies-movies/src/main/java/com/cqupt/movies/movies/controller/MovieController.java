@@ -140,16 +140,16 @@ public class MovieController {
        return R.ok().setData(entities);
     }
 
-    /**
-     * 最开始想前端返回tag字符串，但是都来想，这样不是很好，
-     * 然后想前端传数字，然后我这里映射成string  所以就用/list/tag这个接口
-     * */
-    @GetMapping("/list/tagstring")
-    public R listByTagsString(@RequestParam List<String > tags){   //接收多个类型
-        List<MovieEntity> entities=movieService.listByTagsString(tags);
-
-        return R.ok().setData(entities);
-    }
+//    /**
+//     * 最开始想前端返回tag字符串，但是都来想，这样不是很好，
+//     * 然后想前端传数字，然后我这里映射成string  所以就用/list/tag这个接口
+//     * */
+//    @GetMapping("/list/tagstring")
+//    public R listByTagsString(@RequestParam List<String > tags){   //接收多个类型
+//        List<MovieEntity> entities=movieService.listByTagsString(tags);
+//
+//        return R.ok().setData(entities);
+//    }
 
 
 

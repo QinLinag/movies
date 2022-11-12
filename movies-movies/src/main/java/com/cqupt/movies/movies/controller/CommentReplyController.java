@@ -63,8 +63,8 @@ public class CommentReplyController {
         //if (userInfoTo.getUserId()!=null&&userInfoTo.getUserId()==commentReplyVo.getMemberId()){
             R r=commentReplyService.saveCommentReply(commentReplyVo);
             return R.ok();
-       // }else{
-       //     return R.error(1,"请未登入，或者用户错误");
+        //}else{
+          //  return R.error(1,"请未登入，或者用户错误");
         //}
     }
 
@@ -92,7 +92,7 @@ public class CommentReplyController {
         //if (userInfoTo.getUserId()!=null&&userInfoTo.getUserId()==commentReplyVo.getMemberId()){
             R r=commentReplyService.removeCommentReply(commentReplyVo);
         //}else {
-        //    return R.error(1,"未登入或用户错误");
+          //  return R.error(1,"未登入或用户错误");
         //}
         return R.ok();
     }

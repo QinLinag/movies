@@ -100,7 +100,7 @@ public class InfoMovieController {
     @PostMapping("/thumbup")
     public R thumbUp(@RequestBody InfoMovieVo infoMovieVo){
         UserInfoTo userInfoTo = MovieInterceptor.threadLocal.get();
-        if (userInfoTo.getUserId()!=null&&userInfoTo.getUserId()==infoMovieVo.getMemberId()) {
+        //if (userInfoTo.getUserId()!=null&&userInfoTo.getUserId()==infoMovieVo.getMemberId()) {
             //先查看该用户是否已经点赞该电影，如果已经点赞就取消电赞，
             //远程调用Member服务，查询
             R r = memberFeignService.selectThumbByMemberIdAndMovieId(infoMovieVo);
@@ -128,16 +128,16 @@ public class InfoMovieController {
                 }
             }
 
-        }else {
-            return R.error(1,"用户未登入或者登入错误");
-        }
+        //}else {
+          //  return R.error(1,"用户未登入或者登入错误");
+        //}
     }
 
     @Transactional
     @RequestMapping("/watched")
     public R watched(@RequestBody InfoMovieVo infoMovieVo){
         UserInfoTo userInfoTo = MovieInterceptor.threadLocal.get();
-        if (userInfoTo.getUserId()!=null&&userInfoTo.getUserId()==infoMovieVo.getMemberId()) {
+        //if (userInfoTo.getUserId()!=null&&userInfoTo.getUserId()==infoMovieVo.getMemberId()) {
             //查询用户已看该电影信息
             R r = memberFeignService.selectWatchedByMemberIdAndMovieId(infoMovieVo);
             if (r.getData("data",new TypeReference<MovieInfo>(){})==null) {     //还未点击已看
@@ -159,16 +159,16 @@ public class InfoMovieController {
                 infoMovieService.updateById(entity);
                 return R.ok();
             }
-        }else {
-            return R.error(1,"未登录或登录错误");
-        }
+        //}else {
+          //  return R.error(1,"未登录或登录错误");
+        //}
     }
 
     @Transactional
     @PostMapping("/keen")
     public R keen(@RequestBody InfoMovieVo infoMovieVo){
         UserInfoTo userInfoTo = MovieInterceptor.threadLocal.get();
-        if (userInfoTo.getUserId()!=null&&userInfoTo.getUserId()==infoMovieVo.getMemberId()) {
+       // if (userInfoTo.getUserId()!=null&&userInfoTo.getUserId()==infoMovieVo.getMemberId()) {
             //查询用户想看该电影信息
             R r = memberFeignService.selectKeenByMemberIdAndMovieId(infoMovieVo);
             if (r.getData("data",new TypeReference<MovieInfo>(){})==null) {     //还未点击已看
@@ -190,16 +190,16 @@ public class InfoMovieController {
                 infoMovieService.updateById(entity);
                 return R.ok();
             }
-        }else {
-            return R.error(1,"未登录或登录错误");
-        }
+        //}else {
+          //  return R.error(1,"未登录或登录错误");
+        //}
     }
 
     @Transactional
     @RequestMapping("/bad")
     public R bad(@RequestBody InfoMovieVo infoMovieVo){
         UserInfoTo userInfoTo = MovieInterceptor.threadLocal.get();
-        if (userInfoTo.getUserId()!=null&&userInfoTo.getUserId()==infoMovieVo.getMemberId()) {
+        //if (userInfoTo.getUserId()!=null&&userInfoTo.getUserId()==infoMovieVo.getMemberId()) {
             //查询用户想看该电影信息
             R r = memberFeignService.selectBadByMemberIdAndMovieId(infoMovieVo);
             if (r.getData("data",new TypeReference<MovieInfo>(){})==null) {     //还未点击已看
@@ -221,9 +221,9 @@ public class InfoMovieController {
                 infoMovieService.updateById(entity);
                 return R.ok();
             }
-        }else {
-            return R.error(1,"未登录或登录错误");
-        }
+       // }else {
+         //   return R.error(1,"未登录或登录错误");
+        //}
     }
 
 

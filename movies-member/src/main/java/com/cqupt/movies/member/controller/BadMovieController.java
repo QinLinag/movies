@@ -28,7 +28,7 @@ public class BadMovieController {
     private BadMovieService badMovieService;
 
     /**
-     * 通过用户id，和电影id查询用户点赞该电影的信息
+     * 通过用户id，和电影id查询用户差评该电影的信息
      * */
     @PostMapping("/bad/memberidandmovieid")
     public R selectBadByMemberIdAndMovieId(@RequestBody InfoMovieVo infoMovieVo){
@@ -63,7 +63,7 @@ public class BadMovieController {
     }
 
     /**
-     * 通过用户id和电影id保存一条用户点赞信息，
+     * 通过用户id和电影id保存一条用户差评信息，
      */
     @RequestMapping("/save")
     public R save(@RequestBody InfoMovieVo infoMovieVo){

@@ -44,7 +44,7 @@ public class ThumbMovieController {
      */
     @RequestMapping("/movies/thumb/{memberId}")
     private R listThumbMoviesByMemberId(@PathVariable("memberId") Long memberId){
-        //查询出收藏电影的实例
+
         List<ThumbMovieEntity> entities = thumbMovieService.getThumbMovieEntityByMemberId(memberId);
         if (entities != null && entities.size() > 0) {
             List<Long> movieIds = entities.stream().map(entity -> {
